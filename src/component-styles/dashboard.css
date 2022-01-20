@@ -1,0 +1,12 @@
+.container {
+	display: flex;
+position: relative;
+flex-direction: column;}
+
+.cos {
+	height: 500px;
+}
+
+.container header {
+	position: sticky;
+}

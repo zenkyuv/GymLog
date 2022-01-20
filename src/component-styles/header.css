@@ -236,7 +236,7 @@ header
 }
 
 .header-area {
-  position: absolute;
+  position: fixed;
   top: 0px;
   left: 0px;
   right: 0px;
@@ -256,7 +256,7 @@ header
 
 .header-area .main-nav .logo {
   line-height: 80px;
-  color: #fff;
+  color: rgb(46, 45, 45);
   font-size: 32px;
   font-weight: 800;
   text-transform: uppercase;
@@ -265,6 +265,7 @@ header
   -moz-transition: all 0.3s ease 0s;
   -o-transition: all 0.3s ease 0s;
   transition: all 0.3s ease 0s;
+	margin-left: 10px;
 }
 
 .header-area .main-nav .logo em {
@@ -333,7 +334,7 @@ header
 
 .header-area .main-nav .nav li:hover a,
 .header-area .main-nav .nav li a.active {
-  color: #ed563b!important;
+  color: #ed563b;
   opacity: 1;
 }
 
@@ -355,6 +356,13 @@ header
   right: 40px;
   display: none;
 }
+
+.active:hover {
+	background-color: #ed563b !important;
+	color: white !important;
+	border: 1px solid white !important;
+}
+
 
 .header-area .main-nav .menu-trigger span,
 .header-area .main-nav .menu-trigger span:before,
@@ -464,6 +472,9 @@ header
 
 .header-area.header-sticky .nav li a.active {
   color: #ed563b;
+	border: 1px solid #ed563b;
+	padding: 0 1em 0 1em;
+	background-color: white;
 }
 
 @media (max-width: 1200px) {

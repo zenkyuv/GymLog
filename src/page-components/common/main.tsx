@@ -1,7 +1,8 @@
-import "../component-styles/main.css"
+import "../../component-styles/main.css"
 import featuesFirstIcon from "../../images/featuresFirstIcon.png"
+import { observer } from "mobx-react-lite"
 
-function Main() {
+const Main = observer(() => {
 
 	return (
 	<div>
@@ -173,6 +174,6 @@ function Main() {
 	</section >
 	</div>
 )
-}
+})
 
 export default Main
