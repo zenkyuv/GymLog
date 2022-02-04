@@ -23,7 +23,7 @@ const Header = observer(() => {
 	return (
 		<header className="header-area header-sticky header-color">
 			<nav className="main-nav">
-				<a href="index.html" className="logo">Gym<em> Log</em></a>
+				<a href="index.html" className="logo">Gym<em> Log</em><span className="line">-</span><span>simple workout tracker</span></a>
 				<ul className="nav">
 					{userStore.userLogged ? <li className="scroll-to-section"><a href="#top" className="active" onClick={() => pageStore.makeDashboardVisible()}>Dashboard</a></li> :
 					null}
