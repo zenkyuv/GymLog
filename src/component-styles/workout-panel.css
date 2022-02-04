@@ -1,0 +1,66 @@
+.workout-cnt {
+	border: 2px solid rgb(46, 45, 45);
+	width: 60vw;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	
+}
+.time-cnt {
+	height: 7vh;
+	border-bottom: 2px solid rgb(46, 45, 45);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.time {
+	text-align: center;
+	width: 6em;
+}
+
+.add-button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+ border: 1px solid #ed563b;;
+ border-radius:50%;
+ width: 43px;
+ height: 40px;
+  position: absolute;
+  top: 50%;
+  right: 50%;
+	font-size: 2em;
+	color: white;
+	background-color: #ed563b;
+}
+
+.add-button:hover {
+	cursor: pointer;
+	  background-color: #f9735b;
+  opacity: 1;
+}
+
+.categories {
+	display: flex;
+	flex-direction: column;
+}
+
+.category {
+border-bottom: 2px solid rgb(46, 45, 45);
+padding: 1em;
+cursor: pointer;
+}
+
+.category:hover {
+	background-color: rgb(235, 232, 232);
+}
+
+.time-cnt button {
+	border: none;
+	background-color: white;
+	font-size: 2em;
+	font-weight: bold;
+	cursor: pointer;
+	margin: 0em 1em 0em 1em;
+}
