@@ -11,10 +11,14 @@
     "@types/node": "^16.11.17",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
+    "classnames": "^2.3.1",
+    "date-fns": "^2.28.0",
+    "dayjs": "^1.10.7",
     "firebase": "^9.6.1",
     "mobx": "^6.3.10",
     "mobx-react": "^7.2.1",
     "mobx-react-lite": "^3.2.3",
+    "ramda": "^0.28.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "5.0.0",
@@ -44,5 +48,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/ramda": "^0.27.64"
   }
 }
