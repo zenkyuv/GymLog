@@ -9,11 +9,12 @@ flex-direction: column;}
 }
 
 .nav-bar{
-	width: 150px;
-	background-color: rgb(46, 45, 45);;
+	width: 200px;
+	background-color: rgb(46, 45, 45);
 	color: white;
 	display: flex;
 	flex-direction: column;
+	height: 85vh;
 }
 .user-avatar {
 	margin: 1em;
@@ -40,4 +41,5 @@ flex-direction: column;}
 }
 .cnt-row {
 	display: flex;
+	gap: 2em;
 }

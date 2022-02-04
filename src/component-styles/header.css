@@ -70,7 +70,7 @@ ul, li {
   list-style: none;
 }
 
-header, nav, section, article, aside, footer, hgroup {
+header {
   display: block;
 }
 
@@ -241,7 +241,7 @@ header
   left: 0px;
   right: 0px;
   z-index: 100;
-  height: 80px;
+  /* height: 80px; */
   background: rgba(250,250,250,0.1);
   -webkit-transition: all .5s ease 0s;
   -moz-transition: all .5s ease 0s;
@@ -254,7 +254,16 @@ header
   background: transparent;
 }
 
+.main-nav {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 10vh;
+}
+
+
 .header-area .main-nav .logo {
+	display: flex;
   line-height: 80px;
   color: rgb(46, 45, 45);
   font-size: 32px;
@@ -268,6 +277,14 @@ header
 	margin-left: 10px;
 }
 
+span {
+	font-size: 0.4em;
+}
+
+.line {
+	padding: 0em 0.7em 0em 0.7em;
+}
+
 .header-area .main-nav .logo em {
   font-style: normal;
   color: #ed563b;
@@ -276,7 +293,6 @@ header
 
 .header-area .main-nav .nav {
   float: right;
-  margin-top: 27px;
   margin-right: 0px;
   background-color: transparent;
   -webkit-transition: all 0.3s ease 0s;
@@ -464,10 +480,6 @@ header
 
 .header-area.header-sticky {
   min-height: 80px;
-}
-
-.header-area.header-sticky .nav {
-  margin-top: 20px !important;
 }
 
 .header-area.header-sticky .nav li a.active {

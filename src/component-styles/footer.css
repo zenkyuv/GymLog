@@ -210,6 +210,10 @@ footer {
 footer p {
   color: #232d39;
   font-size: 13px;
+	height: 5vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 footer p a {
