@@ -19,13 +19,13 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore()
 const auth:any = getAuth();	
 
-function createUser(e: any, email: any, password: any) {
+function createUser(e: any, email: any, password: any, userStore:any) {
 		e.preventDefault()
 	createUserWithEmailAndPassword(auth, email.value, password.value).then((cred: any) => {
 		const user = cred.user;
 		if (user) {
-			const userStore = useContext(UserStore)
 			userStore.Logged()
+			userStore.setUserUID(user.uid)
 		}
 		return setDoc(doc(db, "users", cred.user.uid), {
 		first: "Ada",
@@ -42,6 +42,7 @@ function signUser(e: any, email: any, password: any, userStore:any, setLoadingIn
 		const user = userCredential.user;
 		if (user) {
 			userStore.Logged()
+			userStore.setUserUID(user.uid)
 			setLoadingIndicator(false)
 		}
   })

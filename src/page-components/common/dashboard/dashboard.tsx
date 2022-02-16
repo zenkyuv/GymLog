@@ -6,15 +6,24 @@ import WorkoutPanel from "./workout-panel/add-workout";
 import Calendar, { CalendarDayHeader } from "./calendar/calendar";
 import "../../../component-styles/dashboard.css"
 import { useEffect, useReducer, useRef, useState } from "react"
+import { useContext } from "react"
+import databaseData from "../../firestore-database"
+import UserStore from "../../states-store/states/user-store"
 
-const Dashboard = observer(() => {
-	const [yearAndMonth, setYearAndMonth] = useState(today);
-	let component: JSX.Element | undefined = undefined
+	const Dashboard = observer(() => {
+		const [yearAndMonth, setYearAndMonth] = useState(today);
 	const savedComponent = useRef('')
-	const [showComponent, setComponent]: any = useReducer(Reducer, component)
-	
-	function Reducer(state: any, action: any) {
-
+	const userStore = useContext(UserStore)
+	 var dt = new Date();
+ var month = dt.getMonth();
+	var year = dt.getFullYear();
+	const weekday = dt.toLocaleString("default", { weekday: "short" })
+	console.log(dt)
+const daysInMonth = new Date(year, month, 0).getDate();
+	console.log(daysInMonth)
+	let component = undefined
+	const [showComponent, setComponent]:any = useReducer(reducer, component)
+	function reducer(state: any, action: any) {
 		switch (action) {
 			case 'addWorkout':
 				console.log(state, action)
@@ -48,6 +57,7 @@ console.log(showComponent, component)
 						<li>History</li>
 						<li>Statistics</li>
 						<li>cos</li>
+						<li onClick={() => databaseData(userStore)}>getData</li>
 					</ul>
 				</div>
 				{showComponent}

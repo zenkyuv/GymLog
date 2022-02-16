@@ -46,7 +46,7 @@ const spinnerImage = <img className="spinner-img" src={loadingIndicator} alt=""/
 						? spinnerImage
 						: "Login"}
 						</button>
-						<button type="button" onClick={(e: any) => createUser(e, user.email, user.password)} className="btn">Register</button>
+						<button type="button" onClick={(e: any) => createUser(e, user.email, user.password, userStore)} className="btn">Register</button>
 						<button type="button" className="btn cancel" >Close</button>
 			</form>
 		</div>
