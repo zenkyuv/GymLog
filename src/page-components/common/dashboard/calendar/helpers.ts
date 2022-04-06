@@ -101,6 +101,5 @@ export const today = new Date().toISOString().slice(0, 10).split('-').map(e => N
 export const [yearNow, monthNow, dayNow]: any = today
 export const daysOfCurrentMonths = new Date(yearNow, monthNow, 0).getDate()
 export const isToday = (year: any, month:any, day:any) => {
-	console.log(monthNow)
 	return day === dayNow && month === monthNow && year === yearNow
 }

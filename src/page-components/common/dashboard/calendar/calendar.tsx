@@ -1,7 +1,7 @@
-import "../../../../component-styles/calendar.css"
+import '../../../../component-styles/calendar.css';
 
-import PropTypes from "prop-types";
-import classNames from "classnames";
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import {
   daysOfWeek,
   createDaysForCurrentMonth,
@@ -9,76 +9,105 @@ import {
   createDaysForPreviousMonth,
   isWeekendDay,
   getMonthDropdownOptions,
-  getYearDropdownOptions
-} from "./helpers";
+  getYearDropdownOptions,
+} from './helpers';
 
-import {handleMonthNavBackButtonClick, handleMonthNavForwardButtonClick} from "./calendar-buttons"
+import {
+  handleMonthNavBackButtonClick,
+  handleMonthNavForwardButtonClick,
+} from './calendar-buttons';
+import { useContext } from 'react';
+import UserStore from '../../../states-store/states/user-store';
 
 Calendar.propTypes = {
   className: PropTypes.string,
   yearAndMonth: PropTypes.arrayOf(PropTypes.number).isRequired, // e.g. [2021, 6] for June 2021
   onYearAndMonthChange: PropTypes.func.isRequired,
-  renderDay: PropTypes.func
+  renderDay: PropTypes.func,
 };
 export default function Calendar({
-	today,
-	className = "",
-	yearAndMonth,
-	onYearAndMonthChange,
-	renderDay = () => null
+  today,
+  className = '',
+  yearAndMonth,
+  onYearAndMonthChange,
+  renderDay = () => null,
 }: {
-		today: any,
-		className: any,
-		yearAndMonth: any,
-		onYearAndMonthChange:any,
-		renderDay:any
+  today: any;
+  className: any;
+  yearAndMonth: any;
+  onYearAndMonthChange: any;
+  renderDay: any;
 }) {
-	const [year, month] = yearAndMonth;
-	console.log(year, month)
-	console.log(today)
-	const [yearNow, monthNow, dayNow]: any = today
-	console.log(today)
+  const [year, month] = yearAndMonth;
+  const userStore = useContext(UserStore);
+  console.log(year, month);
+  console.log(today);
+  const [yearNow, monthNow, dayNow]: any = today;
+  console.log(today);
   let currentMonthDays = createDaysForCurrentMonth(year, month);
   let previousMonthDays = createDaysForPreviousMonth(
     year,
     month,
     currentMonthDays
-	);
+  );
 
   let nextMonthDays = createDaysForNextMonth(year, month, currentMonthDays);
   let calendarGridDayObjects = [
     ...previousMonthDays,
     ...currentMonthDays,
-    ...nextMonthDays
-	];
+    ...nextMonthDays,
+  ];
 
-  const handleMonthSelect = (evt:any) => {
+  const handleMonthSelect = (evt: any) => {
     let nextYear = year;
     let nextMonth = parseInt(evt.target.value, 10);
     onYearAndMonthChange([nextYear, nextMonth]);
   };
 
-  const handleYearSelect = (evt:any) => {
+  const handleYearSelect = (evt: any) => {
     let nextMonth = month;
     let nextYear = parseInt(evt.target.value, 10);
     onYearAndMonthChange([nextYear, nextMonth]);
-	};
+  };
 
-	const component = "calendar"
+  const component = 'calendar';
 
   return (
     <div className="calendar-root">
       <div className="navigation-header">
         <div className="month-nav-arrow-buttons">
-          <button onClick={() => handleMonthNavBackButtonClick({component,yearAndMonth, onYearAndMonthChange})}> prev </button>
-          <button onClick={() => handleMonthNavForwardButtonClick({component, yearAndMonth, onYearAndMonthChange})}>next</button>
+          <button
+            onClick={() =>
+              handleMonthNavBackButtonClick({
+                component,
+                yearAndMonth,
+                onYearAndMonthChange,
+                userStore,
+              })
+            }
+          >
+            {' '}
+            prev{' '}
+          </button>
+          <button
+            onClick={() =>
+              handleMonthNavForwardButtonClick({
+                component,
+                yearAndMonth,
+                onYearAndMonthChange,
+                userStore,
+              })
+            }
+          >
+            next
+          </button>
         </div>
         <select
           className="month-select"
           value={month}
           onChange={handleMonthSelect}
         >
-          {getMonthDropdownOptions().map(({ label, value }:any) => (
+          {getMonthDropdownOptions().map(({ label, value }: any) => (
             <option value={value} key={value}>
               {label}
             </option>
@@ -89,7 +118,7 @@ export default function Calendar({
           value={year}
           onChange={handleYearSelect}
         >
-          {getYearDropdownOptions(year).map(({ label, value }:any) => (
+          {getYearDropdownOptions(year).map(({ label, value }: any) => (
             <option value={value} key={value}>
               {label}
             </option>
@@ -97,11 +126,11 @@ export default function Calendar({
         </select>
       </div>
       <div className="days-of-week">
-				{daysOfWeek.map((day: any, index: any) => (
+        {daysOfWeek.map((day: any, index: any) => (
           <div
             key={day}
-            className={classNames("day-of-week-header-cell", {
-              "weekend-day": [6, 0].includes(index)
+            className={classNames('day-of-week-header-cell', {
+              'weekend-day': [6, 0].includes(index),
             })}
           >
             {day}
@@ -109,17 +138,25 @@ export default function Calendar({
         ))}
       </div>
       <div className="days-grid">
-				{calendarGridDayObjects.map((day) => (
+        {calendarGridDayObjects.map((day) => (
           <div
             key={day.dateString}
-            className={classNames("day-grid-item-container", {
-              "weekend-day": isWeekendDay(day.dateString),
-							"current-month": day.isCurrentMonth,
-							"not-current-month": !day.isCurrentMonth
-							
-						})}
+            className={classNames('day-grid-item-container', {
+              'weekend-day': isWeekendDay(day.dateString),
+              'current-month': day.isCurrentMonth,
+              'not-current-month': !day.isCurrentMonth,
+            })}
           >
-						<div className="day-content-wrapper">{day.dayOfMonth === dayNow && year === yearNow && month === monthNow && day.isCurrentMonth ? <span className="today">{renderDay(day)}</span> : renderDay(day)}</div>
+            <div className="day-content-wrapper">
+              {day.dayOfMonth === dayNow &&
+              year === yearNow &&
+              month === monthNow &&
+              day.isCurrentMonth ? (
+                <span className="today">{renderDay(day)}</span>
+              ) : (
+                renderDay(day)
+              )}
+            </div>
           </div>
         ))}
       </div>
@@ -128,11 +165,10 @@ export default function Calendar({
 }
 
 CalendarDayHeader.propTypes = {
-  calendarDayObject: PropTypes.object.isRequired
+  calendarDayObject: PropTypes.object.isRequired,
 };
 export function CalendarDayHeader({ calendarDayObject }: any) {
   return (
     <div className="day-grid-item-header">{calendarDayObject.dayOfMonth}</div>
   );
 }
-
