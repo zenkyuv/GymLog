@@ -27,16 +27,13 @@ Table of contents
 font & reset css
 --------------------------------------------- 
 */
-@import url("https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i");
+@import url('https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i');
 /* 
 ---------------------------------------------
 reset
 --------------------------------------------- 
 */
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, div
-pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q,
-s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li,
-figure, header, nav, section, article, aside, footer, figcaption {
+* {
   margin: 0;
   padding: 0;
   border: 0;
@@ -44,7 +41,7 @@ figure, header, nav, section, article, aside, footer, figcaption {
 }
 
 .clearfix:after {
-  content: ".";
+  content: '.';
   display: block;
   clear: both;
   visibility: hidden;
@@ -64,13 +61,20 @@ html[xmlns] .clearfix {
   height: 1%;
 }
 
-ul, li {
+ul,
+li {
   padding: 0;
   margin: 0;
   list-style: none;
 }
 
-header, nav, section, article, aside, footer, hgroup {
+header,
+nav,
+section,
+article,
+aside,
+footer,
+hgroup {
   display: block;
 }
 
@@ -78,7 +82,8 @@ header, nav, section, article, aside, footer, hgroup {
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   font-family: 'Poppins', sans-serif;
   font-weight: 400;
   background-color: #fff;
@@ -92,7 +97,12 @@ a {
   text-decoration: none !important;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin-top: 0px;
   margin-bottom: 0px;
 }
@@ -129,7 +139,8 @@ body {
 }
 
 @media (max-width: 991px) {
-  html, body {
+  html,
+  body {
     overflow-x: hidden;
   }
   .mobile-top-fix {
@@ -186,16 +197,12 @@ body {
   text-align: center;
   font-weight: 400;
   text-transform: uppercase;
-  transition: all .3s;
+  transition: all 0.3s;
 }
 
 .main-button a:hover {
   background-color: #f9735b;
 }
-
-
-
-
 
 /* 
 ---------------------------------------------
@@ -210,10 +217,10 @@ footer {
 footer p {
   color: #232d39;
   font-size: 13px;
-	height: 5vh;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+  height: 5vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 footer p a {
@@ -225,8 +232,6 @@ footer p a:hover {
   color: #ed563b;
 }
 
-
-
 /* 
 ---------------------------------------------
 preloader
@@ -234,99 +239,98 @@ preloader
 */
 
 .js-preloader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #232d39;
-    display: -webkit-box;
-    display: flex;
-    -webkit-box-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    justify-content: center;
-    opacity: 1;
-    visibility: visible;
-    z-index: 9999;
-    -webkit-transition: opacity 0.25s ease;
-    transition: opacity 0.25s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #232d39;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  opacity: 1;
+  visibility: visible;
+  z-index: 9999;
+  -webkit-transition: opacity 0.25s ease;
+  transition: opacity 0.25s ease;
 }
 
 .js-preloader.loaded {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 @-webkit-keyframes dot {
-    50% {
-        -webkit-transform: translateX(96px);
-        transform: translateX(96px);
-    }
+  50% {
+    -webkit-transform: translateX(96px);
+    transform: translateX(96px);
+  }
 }
 
 @keyframes dot {
-    50% {
-        -webkit-transform: translateX(96px);
-        transform: translateX(96px);
-    }
+  50% {
+    -webkit-transform: translateX(96px);
+    transform: translateX(96px);
+  }
 }
 
 @-webkit-keyframes dots {
-    50% {
-        -webkit-transform: translateX(-31px);
-        transform: translateX(-31px);
-    }
+  50% {
+    -webkit-transform: translateX(-31px);
+    transform: translateX(-31px);
+  }
 }
 
 @keyframes dots {
-    50% {
-        -webkit-transform: translateX(-31px);
-        transform: translateX(-31px);
-    }
+  50% {
+    -webkit-transform: translateX(-31px);
+    transform: translateX(-31px);
+  }
 }
 
 .preloader-inner {
-    position: relative;
-    width: 142px;
-    height: 40px;
-    background: #232d39;
+  position: relative;
+  width: 142px;
+  height: 40px;
+  background: #232d39;
 }
 
 .preloader-inner .dot {
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    top: 12px;
-    left: 15px;
-    background: #fff;
-    border-radius: 50%;
-    -webkit-transform: translateX(0);
-    transform: translateX(0);
-    -webkit-animation: dot 2.8s infinite;
-    animation: dot 2.8s infinite;
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 12px;
+  left: 15px;
+  background: #fff;
+  border-radius: 50%;
+  -webkit-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-animation: dot 2.8s infinite;
+  animation: dot 2.8s infinite;
 }
 
 .preloader-inner .dots {
-    -webkit-transform: translateX(0);
-    transform: translateX(0);
-    margin-top: 12px;
-    margin-left: 31px;
-    -webkit-animation: dots 2.8s infinite;
-    animation: dots 2.8s infinite;
+  -webkit-transform: translateX(0);
+  transform: translateX(0);
+  margin-top: 12px;
+  margin-left: 31px;
+  -webkit-animation: dots 2.8s infinite;
+  animation: dots 2.8s infinite;
 }
 
 .preloader-inner .dots span {
-    display: block;
-    float: left;
-    width: 16px;
-    height: 16px;
-    margin-left: 16px;
-    background: #fff;
-    border-radius: 50%;
+  display: block;
+  float: left;
+  width: 16px;
+  height: 16px;
+  margin-left: 16px;
+  background: #fff;
+  border-radius: 50%;
 }
-
 
 /* 
 ---------------------------------------------
@@ -334,9 +338,7 @@ responsive
 --------------------------------------------- 
 */
 
-
 @media (max-width: 992px) {
-
   .main-banner .caption h2 {
     font-size: 64px;
   }
@@ -362,7 +364,6 @@ responsive
   #contact-us .contact-form #contact {
     padding: 30px;
   }
-
 }
 
 @media (max-width: 450px) {
