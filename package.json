@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "main": "./src-x/index.js",
   "dependencies": {
     "@date-io/dayjs": "^2.13.1",
     "@emotion/react": "^11.8.1",
@@ -11,33 +12,36 @@
     "@mui/material": "^5.5.0",
     "@mui/x-data-grid": "^5.6.1",
     "@react-native-firebase/auth": "^14.1.0",
-    "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.0.3",
     "@types/node": "^16.11.17",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
     "classnames": "^2.3.1",
     "date-fns": "^2.28.0",
     "dayjs": "^1.10.7",
+    "es-module-shims": "^0.14.0",
     "firebase": "^9.6.1",
+    "importly": "^0.2.0",
     "mobx": "^6.3.10",
     "mobx-react": "^7.2.1",
     "mobx-react-lite": "^3.2.3",
     "ramda": "^0.28.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-scripts": "5.0.0",
+    "rollup-plugin-import-css": "^3.0.3",
+    "rollup-plugin-postcss": "^4.0.2",
     "typescript": "^4.5.4",
-    "web-vitals": "^2.1.2"
+    "web-vitals": "^2.1.2",
+    "webpack": "^5.72.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "rollup -w -c rollup.config.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "cynic": " cynic node src-x/test/tests.test.js"
+    "cynic": " cynic node src-x/test/tests.test.js",
+    "start": "http-server ./src-x",
+    "watch": "rollup -w -c rollup.config.js"
   },
   "eslintConfig": {
     "extends": [
@@ -58,7 +62,18 @@
     ]
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^21.1.0",
+    "@rollup/plugin-image": "^2.1.1",
+    "@rollup/plugin-node-resolve": "^13.2.1",
+    "@rollup/plugin-typescript": "^8.3.2",
     "@types/ramda": "^0.27.64",
-    "cynic": "^0.1.0-dev.16"
+    "autoprefixer": "^10.4.4",
+    "cynic": "^0.1.0-dev.16",
+    "postcss": "^8.4.13",
+    "rollup": "^2.70.2",
+    "rollup-plugin-livereload": "^2.0.5",
+    "rollup-plugin-typescript2": "^0.31.2",
+    "stylelint-config-recommended": "^7.0.0",
+    "webpack-cli": "^4.9.2"
   }
 }
