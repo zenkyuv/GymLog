@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { getData, setDocument } from '../../../firestore-database';
-import '../../../../component-styles/control-panel.css';
+import styles from '../../../../component-styles/control-panel.module.css';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {
@@ -8,11 +8,7 @@ import {
   GridRowsProp,
   GridColDef,
   GridRowId,
-  GridRowModel,
-  GridSelectionModel,
 } from '@mui/x-data-grid';
-// import useDemoData from '@mui/material/Grid';
-import useDemoData from '@mui/material/Grid';
 import { ClickAwayListener } from '@mui/material';
 function ControlPanel(data: any) {
   const [show, setShowEl] = useState(false);
@@ -73,8 +69,6 @@ function ControlPanel(data: any) {
     console.log('reset');
   }
   const dbData = data.userStore.workoutData;
-  // const weight = dbData !== undefined ? dbData.sets.map((s: any) => s.split('-')[3]) : null
-  // const reps = dbData !== undefined ? dbData.sets.map((s: any) => s.split('-')[2]) : null
   const weight = dbData !== undefined ? dbData.weight : null;
   const reps = dbData !== undefined ? dbData.reps : null;
   console.log(weight, reps);
@@ -108,14 +102,14 @@ function ControlPanel(data: any) {
   console.log(dbData.yearAndMonth);
   console.log(data.databaseTimeEqualsFrontend);
   return (
-    <div className="row">
+    <div className={styles.row}>
       {/* {show ? <span className="alert">Set weight or reps</span> : <span className="hidden">Set weight or reps</span>} */}
-      <form className="row" onReset={handleReset} onSubmit={handleSubmit}>
+      <form className={styles.row} onReset={handleReset} onSubmit={handleSubmit}>
         <h1>{data.exercise}</h1>
         WEIGHT(kgs):
         <TextField
           type="number"
-          id="outlined-start-adornment"
+          id={styles["outlined-start-adornment"]}
           placeholder="kg"
           value={values.weight}
           onChange={handleChange('weight')}
@@ -125,10 +119,10 @@ function ControlPanel(data: any) {
           type="number"
           value={values.reps}
           onChange={handleChange('reps')}
-          id="outlined-start-adornment"
+          id={styles["outlined-start-adornment"]}
           placeholder="reps"
         />
-        <div className="flex-gap">
+        <div className={styles["flex-gap"]}>
           <Button
             type="submit"
             onClick={() => getData(data.userStore, data.yearAndMonth)}
@@ -167,7 +161,7 @@ function ControlPanel(data: any) {
         </div>
       </form>
       {data.databaseTimeEqualsFrontend ? (
-        <div className="column">
+        <div className={styles.column}>
           <ClickAwayListener
             onClickAway={() => setSelectionModel([])}
             style={{ height: '100%', width: '100%' }}
@@ -183,21 +177,6 @@ function ControlPanel(data: any) {
               }
             />
           </ClickAwayListener>
-          {/* <div>
-            {weight
-              ? index.map((_: any, i: any) => (
-                  <p>
-                    {i}
-                    {reps[i]} {weight[i]}{' '}
-                  </p>
-                ))
-              : null}
-          </div> */}
-          {/* <div>{weight ?
-					weight.map((e: any, i: any) => <p>{e} kgs</p>) :
-								null}</div> */}
-          {/* <div>{reps ? reps.map((e: any, i:any) => <p>{e} reps</p>) :
-								null}</div> */}
         </div>
       ) : null}
     </div>

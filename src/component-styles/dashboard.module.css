@@ -1,0 +1,105 @@
+.container {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  margin: 1em;
+}
+
+.container header {
+  position: sticky;
+}
+
+.nav {
+  display: flex;
+}
+
+.nav-bar {
+  min-width: 70px;
+  background-color: rgb(46, 45, 45);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+}
+.user-avatar {
+  background-color: #ed563b;
+  width: 80px;
+  height: 80px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5em;
+  letter-spacing: 3px;
+}
+
+.nav-bar li {
+  display: flex;
+  justify-content: center;
+  padding: 1em;
+  margin: 0.5em 1em 0.5em 1em;
+  cursor: pointer;
+  margin-bottom: 2em;
+}
+.nav-bar li:first-child {
+  margin-bottom: 5em;
+}
+
+.nav-bar li:last-child {
+  margin-top: 5em;
+}
+.cnt-row {
+  display: flex;
+  gap: 2em;
+	justify-content: space-between;
+}
+/* .MuiButtonBase-root {
+  font-size: 2em;
+} */
+
+.MuiPickerStaticWrapper-root {
+  /* width: 500px;
+	height: 500px; */
+  font-size: 1rem !important;
+}
+body {
+  font-size: 20px;
+}
+
+.nav-icon {
+  width: 35px;
+}
+
+.nav-bar li:hover {
+  background-color: rgba(50, 49, 49, 0.939);
+  border-radius: 20px;
+}
+
+.clicked {
+  background-color: rgba(64, 63, 63, 0.939);
+  border-radius: 20px;
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.3em;
+  justify-content: center;
+  text-align: center;
+  margin: 1em 0 1em 0;
+}
+
+h3 {
+  display: flex;
+  align-self: flex-start;
+}
+span {
+  margin-left: 1em;
+}
+
+.user-info-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  align-items: center;
+}

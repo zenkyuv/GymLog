@@ -10,14 +10,14 @@ import {
   isWeekendDay,
   getMonthDropdownOptions,
   getYearDropdownOptions,
-} from './helpers';
+} from './helpers.js';
 
 import {
   handleMonthNavBackButtonClick,
   handleMonthNavForwardButtonClick,
-} from './calendar-buttons';
+} from './calendar-buttons.js';
 import { useContext } from 'react';
-import UserStore from '../../../states-store/states/user-store';
+import UserStore from '../../../states-store/states/user-store.js';
 
 Calendar.propTypes = {
   className: PropTypes.string,

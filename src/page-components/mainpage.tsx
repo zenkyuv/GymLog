@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
-import Footer from './common/footer';
-import Header from './common/header';
-import Main from './common/main';
+import Footer from './common/footer.js';
+import Header from './common/header.js';
+import Main from './common/main.js';
 
 const MainPage = observer(() => {
   return (

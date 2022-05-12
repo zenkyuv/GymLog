@@ -1,32 +1,31 @@
 {
   "compilerOptions": {
-		"experimentalDecorators": true,
-		"typeRoots" : ["node_modules/@types", "src/types"],
+    "experimentalDecorators": true,
+    "typeRoots": ["node_modules/@types", "src/types"],
     "target": "esnext",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
+    // "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    "declaration": true,
+    "sourceMap": false,
     "isolatedModules": true,
     "noEmit": false,
     "jsx": "react-jsx",
-		"rootDir": "./src",
-		"outDir": "./src-x"
+    "rootDir": "src",
+    "outDir": "src-x"
   },
   "include": [
-    "./src/**/**.ts",
-		"./src/**/*.js",
-		"./src/**/*.tsx"
-, "src/test/tests.jsx"  ]
+    "src/**/*.ts",
+    "src/**/*.js",
+    "src/**/*.tsx",
+    "src/test/tests.jsx"
+  ]
 }

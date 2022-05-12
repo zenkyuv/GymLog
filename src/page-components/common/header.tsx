@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import '../../component-styles/header.css';
+import styles from '../../component-styles/header.module.css';
 import { logout } from '../auth';
 import Register from '../register-login-panel';
 import { observer } from 'mobx-react-lite';
@@ -23,29 +23,29 @@ const Header = observer((css: any) => {
   return (
     <header
       className={classNames(
-        'header-area header-sticky',
-        setCss ? 'dashboard-page-colors' : 'main-page-colors'
+        styles['header-area header-sticky'],
+        setCss ? styles['dashboard-page-colors'] : styles['main-page-colors']
       )}
     >
-      <nav className="main-nav">
+      <nav className={styles["main-nav"]}>
         <a
           href="index.html"
           className={classNames(
-            'logo',
-            setCss ? 'dashboard-page-colors' : 'main-page-colors'
+            styles.logo,
+            setCss ? styles['dashboard-page-colors'] : styles['main-page-colors']
           )}
         >
-          Gym<span className="text">Log</span>
-          <span className="line">-</span>
-          <span className="info">simple workout tracker</span>
+          Gym<span className={styles.text}>Log</span>
+          <span className={styles.line}>-</span>
+          <span className={styles.info}>simple workout tracker</span>
         </a>
-        <div className="sign-buttons">
-          <ul className="nav">
+        <div className={styles["sign-buttons"]}>
+          <ul className={styles.nav}>
             {userStore.userLogged && !pageStore.dashboardVisible ? (
-              <li className="scroll-to-section">
+              <li className={styles["scroll-to-section"]}>
                 <a
                   href="#top"
-                  className="active"
+                  className={styles.active}
                   onClick={() => pageStore.makeDashboardVisible()}
                 >
                   Dashboard
@@ -53,13 +53,13 @@ const Header = observer((css: any) => {
               </li>
             ) : null}
             {userStore.userLogged === false ? (
-              <li className="main-button">
+              <li className={styles["main-button"]}>
                 <a href="#/" onClick={() => setClick(true)}>
                   Sign up
                 </a>
               </li>
             ) : (
-              <li className="main-button">
+              <li className={styles["main-button"]}>
                 <a href="#/" onClick={() => logout(userStore, pageStore)}>
                   Sign out
                 </a>
@@ -67,7 +67,7 @@ const Header = observer((css: any) => {
             )}
           </ul>
           {/* <a className="menu-trigger" href="#/"> */}
-          <span className="bars">---</span>
+          <span className={styles.bars}>---</span>
           {/* </a> */}
         </div>
       </nav>

@@ -1,4 +1,5 @@
-import { daysOfCurrentMonths } from './helpers';
+import { daysOfCurrentMonths } from './helpers.js';
+import styles from "../../../../component-styles/workout-panel.module.css"
 
 export function handleMonthNavBackButtonClick({
   setExercisesPanel,
@@ -88,9 +89,9 @@ export function renderButtons(
   userStore: any
 ) {
   return (
-    <div className="time-cnt">
+    <div className={styles["time-cnt"]}>
       <button
-        className="button-margin"
+        className={styles["button-margin"]}
         onClick={() =>
           handleMonthNavBackButtonClick({
             setExercisesPanel,
@@ -105,7 +106,7 @@ export function renderButtons(
       </button>
       {componentBetween}
       <button
-        className="button-margin"
+        className={styles["button-margin"]}
         onClick={() =>
           handleMonthNavForwardButtonClick({
             setExercisesPanel,

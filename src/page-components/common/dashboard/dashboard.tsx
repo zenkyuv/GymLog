@@ -1,29 +1,28 @@
 import { observer } from 'mobx-react-lite';
-import Footer from '../footer';
-import Header from '../header';
-import { today } from './calendar/helpers';
-import WorkoutPanel from './workout-panel/add-workout';
-import Calendar, { CalendarDayHeader } from './calendar/calendar';
-import '../../../component-styles/dashboard.css';
+import { today } from './calendar/helpers.js';
+import WorkoutPanel from './workout-panel/add-workout.js';
+import Calendar, { CalendarDayHeader } from './calendar/calendar.js';
+import styles from '../../../component-styles/dashboard.module.css';
 import { useEffect, useReducer, useRef, useState } from 'react';
 import { useContext } from 'react';
-import { getData } from '../../firestore-database';
-import UserStore from '../../states-store/states/user-store';
-import { LocalizationProvider, StaticDatePicker } from '@mui/lab';
-import DateAdapter from '@mui/lab/AdapterDayjs';
-import TextField from '@mui/material/TextField';
+import { getData } from '../../firestore-database.js';
+import UserStore from '../../states-store/states/user-store.js';
+import homeIcon from '../../../images/home-icon.svg';
+import calendarIcon from '../../../images/calendar-icon.svg';
+import historyIcon from '../../../images/history-icon.svg';
+import statisticsIcon from '../../../images/statistics-icon.svg';
+import logoutIcon from '../../../images/logout-icon.svg';
+import { logout } from '../../auth.js';
+import PageStore from '../../states-store/states/page-store.js';
 
 const Dashboard = observer(() => {
   const [yearAndMonth, setYearAndMonth]: any = useState(today);
-  console.log(yearAndMonth);
-  const savedComponent = useRef('');
+  const savedComponent = useRef('home');
   const userStore = useContext(UserStore);
+  const pageStore = useContext(PageStore);
   const [trainingData, setData] = useState(undefined);
   const [selectedDate, handleDateChange] = useState(new Date());
-  const [visible, setVisible] = useState({
-    addWorkout: false,
-    calendar: false,
-  });
+  console.log(today);
   var dt = new Date();
   var month = dt.getMonth();
   var year = dt.getFullYear();
@@ -32,9 +31,8 @@ const Dashboard = observer(() => {
   let component = undefined;
   const [showComponent, setComponent]: any = useReducer(reducer, component);
   function reducer(state: any, action: any) {
-    if (action === 'addWorkout' && visible.addWorkout) {
-      console.log(state, action);
-      savedComponent.current = 'addWorkout';
+    if (action === 'home') {
+      savedComponent.current = 'home';
       return (component = (
         <WorkoutPanel
           component={'workoutPanel'}
@@ -42,7 +40,7 @@ const Dashboard = observer(() => {
           onYearAndMonthChange={setYearAndMonth}
         />
       ));
-    } else if (action === 'calendar' && visible.calendar) {
+    } else if (action === 'calendar') {
       savedComponent.current = 'calendar';
       return (component = (
         <Calendar
@@ -56,22 +54,6 @@ const Dashboard = observer(() => {
           )}
         />
       ));
-      // return (component = (
-      //   <LocalizationProvider dateAdapter={DateAdapter}>
-      //     <StaticDatePicker
-      //       orientation="portrait"
-      //       openTo="day"
-      //       value={selectedDate}
-      //       // shouldDisableDate={isWeekend}
-      //       onChange={(newValue: any) => {
-      //         handleDateChange(newValue);
-      //       }}
-      //       renderInput={(params) => (
-      //         <TextField sx={{ width: 100 }} {...params} />
-      //       )}
-      //     />
-      //   </LocalizationProvider>
-      // ));
     }
   }
   const data = userStore.workoutData;
@@ -82,43 +64,73 @@ const Dashboard = observer(() => {
     const data = userStore.workoutData;
     getData(userStore, yearAndMonth);
   }, [userStore, yearAndMonth]);
-  const css = 'dashboard-nav';
+  const css = styles["dashboard-nav"];
   return (
-    <div className="container">
-      <Header css={'dashboard-nav'} />
-      <div className="cnt-row">
-        <div className="nav-bar">
-          <div className="user-avatar">PG</div>
+		<div className={styles.container}>
+			<div className={styles["cnt-row"]}>
+        <div className={styles["nav-bar"]}>
+          <a href="index.html" className={styles.logo}>
+            Gym<br></br>
+            <span className={styles.text}>Log</span>
+          </a>
           <ul>
             <li
+              className={
+                savedComponent.current === 'home' ? styles.clicked : undefined
+              }
               onClick={() => {
-                setComponent('addWorkout');
+                setComponent('home');
                 getData(userStore, yearAndMonth);
-                visible.addWorkout
-                  ? setVisible({ addWorkout: false, calendar: false })
-                  : setVisible({ addWorkout: true, calendar: false });
               }}
             >
-              Add workout
+              <img className={styles["nav-icon"]} alt="home icon" src={homeIcon} />
             </li>
             <li
+              className={
+                savedComponent.current === 'calendar' ? styles.clicked : undefined
+              }
               onClick={() => {
                 setComponent('calendar');
                 getData(userStore, yearAndMonth);
-                visible.calendar
-                  ? setVisible({ addWorkout: false, calendar: false })
-                  : setVisible({ addWorkout: false, calendar: true });
               }}
             >
-              Calendar
+              <img
+                className={styles["nav-icon"]}
+                src={calendarIcon}
+                alt="calendar icon"
+              />
             </li>
-            <li>History</li>
-            <li>Statistics</li>
+						<li>
+              <img className={styles["nav-icon"]} src={historyIcon} alt="history icon" />
+            </li>
+            <li>
+              <img
+                className={styles["nav-icon"]}
+                src={statisticsIcon}
+                alt="statistics icon"
+              />
+            </li>
+            <li>
+              <img
+                onClick={() => {
+                  logout(userStore, pageStore);
+                }}
+                className={styles["nav-icon"]}
+                src={logoutIcon}
+                alt="logout icon"
+              />
+            </li>
           </ul>
         </div>
-        {showComponent}
+				{showComponent}
+        <div className={styles["user-info-bar"]}>
+          <h3>
+            <span> My Profile</span> <span>..</span>
+          </h3>
+          <div className={styles["user-avatar"]}>PG</div>
+          <h3>Przemek Galezki</h3>
+        </div>
       </div>
-      <Footer />
     </div>
   );
 });

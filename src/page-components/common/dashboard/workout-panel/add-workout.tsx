@@ -1,10 +1,10 @@
-import '../../../../component-styles/workout-panel.css';
-import { isToday } from '../calendar/helpers';
-import { renderButtons } from '../calendar/calendar-buttons';
+import styles from  '../../../../component-styles/workout-panel.module.css';
+import { isToday } from '../calendar/helpers.js';
+import { renderButtons } from '../calendar/calendar-buttons.js';
 import { useContext, useEffect, useState } from 'react';
-import shoulderExercises from './shoulderExercises';
-import UserStore from '../../../states-store/states/user-store';
-import ControlPanel from './ex-control-panel';
+import shoulderExercises from './shoulderExercises.js';
+import UserStore from '../../../states-store/states/user-store.js';
+import ControlPanel from './ex-control-panel.js';
 import { observer } from 'mobx-react';
 import loadingIndicator from '../../../../images/loading-indicator-2.svg';
 import {
@@ -26,7 +26,7 @@ const WorkoutPanel = observer(
       controlPanel: false,
     });
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
-    type addButton = 'add-button top' | 'add-button center';
+    type addButton = 'add-button top' | 'add-button';
     const [category, setCategory]: any = useState(undefined);
     const categories = [
       'Shoulders',
@@ -38,19 +38,19 @@ const WorkoutPanel = observer(
       'Abs',
     ];
     const componentBetween = (
-      <h1 className="time">
+      <h1 className={styles.time}>
         {isToday(year, month, day) ? 'Today' : `${year}-${month}-${day}`}
       </h1>
     );
     function exercises() {
       return (
-        <div className="categories">
+        <div className={styles.categories}>
           {category === undefined
             ? categories.map((category, i) => (
                 <div
                   key={i}
                   onClick={() => setCategory(category)}
-                  className="category"
+                  className={styles.category}
                 >
                   {category}
                 </div>
@@ -95,8 +95,6 @@ const WorkoutPanel = observer(
       databaseYear === year && databaseMonth === month && databaseDay === day;
     useEffect(() => {}, [data, userStore.workoutData]);
     console.log(databaseDay, day);
-    // const weight = data.sets !== undefined ? data.sets.map((s: any) => s.split('-')[3]) : undefined
-    // const reps = data.sets !== undefined ? data.sets.map((s: any) => s.split('-')[2]) : undefined
     const weight = data.weight ? data.weight : undefined;
     const reps = data.reps ? data.reps : undefined;
     const index = weight;
@@ -114,27 +112,27 @@ const WorkoutPanel = observer(
       { field: 'reps', headerName: 'Reps', width: 180 },
     ];
     return (
-      <div className="workout-cnt">
+      <div className={styles["workout-cnt"]}>
         {databaseTimeEqualsFrontend && !showExercises.controlPanel ? (
-          <div className="flex-row time-center">
+          <div className={styles["flex-row time-center"]}>
             {changeTimeBtns}
-            {addExerciseBtn('add-button top')}
+            {addExerciseBtn(styles['add-button top'])}
           </div>
         ) : (
-          <div className="flex-row time-center">{changeTimeBtns}</div>
+          <div className={styles["flex-row time-center"]}>{changeTimeBtns}</div>
         )}
         {userStore.dbDataLoading && !showExercises.controlPanel ? (
           <div>
             <img
               alt="loading"
-              className="loading-indicator"
+              className={styles["loading-indicator"]}
               src={loadingIndicator}
             />
           </div>
         ) : showExercises.showExercise ? (
           exercises()
         ) : databaseTimeEqualsFrontend && !showExercises.controlPanel ? (
-          <div className="exercise">
+          <div className={styles.exercise}>
             <h3>{data.exercise}</h3>
 
             <ClickAwayListener
@@ -155,7 +153,7 @@ const WorkoutPanel = observer(
               <div>{reps ? reps.map((e: any) => <p>{e}reps</p>) : null}</div> */}
           </div>
         ) : !showExercises.controlPanel ? (
-          <div>{addExerciseBtn('add-button center')}</div>
+          <div className={styles.center}>{addExerciseBtn(styles['add-button'])}</div>
         ) : (
           <ControlPanel
             databaseTimeEqualsFrontend={databaseTimeEqualsFrontend}

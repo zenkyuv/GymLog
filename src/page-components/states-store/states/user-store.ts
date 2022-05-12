@@ -4,11 +4,11 @@ import { createContext } from 'react';
 import { useState } from 'react';
 
 export class UserStore {
-  @observable userLogged = false;
-  userUID = '';
+  @observable userLogged:boolean = false;
+  userUID:string = '';
   @observable workoutData: any = [];
-  choosenExercise: any = [];
-  @observable dbDataLoading: any = true;
+  choosenExercise:any[] = [];
+  @observable dbDataLoading: boolean = true;
 
   constructor() {
     makeObservable(this);
@@ -44,7 +44,7 @@ export class UserStore {
   }
 
   @action
-  setChoosenExercises = (exercise: any, category: any) => {
+  setChoosenExercises = (exercise: string, category: string) => {
     this.choosenExercise.push({
       exercise: exercise,
       category: category,

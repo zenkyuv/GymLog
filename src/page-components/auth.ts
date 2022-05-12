@@ -4,6 +4,9 @@ import {
   signOut,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  browserSessionPersistence,
+  setPersistence,
+  onAuthStateChanged,
 } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { doc, getFirestore, setDoc } from 'firebase/firestore';
@@ -42,15 +45,27 @@ function createUser(e: any, email: any, password: any, userStore: any) {
   );
 }
 
-function signUser(
-  e: any,
-  email: any,
-  password: any,
-  userStore: any,
-  setLoadingIndicator: any
+interface UserInfo {
+	email: HTMLInputElement
+	password: HTMLInputElement
+}
+interface signUserInfo {
+	e: Event,
+	user: UserInfo
+	userStore: any,
+	setLoadingIndicator: any
+}
+function signUser (
+    {e,
+		user,
+    userStore,
+    setLoadingIndicator}: signUserInfo
 ) {
-  e.preventDefault();
-  signInWithEmailAndPassword(auth, email.value, password.value)
+	const email = user.email.value
+	const password = user.password.value
+console.log(email,password)
+	e.preventDefault();
+  signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Signed in
       const user = userCredential.user;
@@ -58,6 +73,7 @@ function signUser(
         userStore.Logged();
         userStore.setUserUID(user.uid);
         setLoadingIndicator(false);
+        // SetPr(email.value, password.value);
         // databaseData(userStore);
       }
     })
@@ -83,4 +99,40 @@ function logout(userStore: any, pageStore: any) {
     });
 }
 
-export { signUser, createUser, logout };
+// function SetPr(email: any, password: any) {
+//   setPersistence(auth, browserSessionPersistence)
+//     .then(() => {
+//       console.log();
+//       // Existing and future Auth states are now persisted in the current
+//       // session only. Closing the window would clear any existing state even
+//       // if a user forgets to sign out.
+//       // ...
+//       // New sign-in will be persisted with session persistence.
+//       return signInWithEmailAndPassword(auth, email, password);
+//     })
+//     .catch((error) => {
+//       // Handle Errors here.
+//       const errorCode = error.code;
+//       const errorMessage = error.message;
+//     });
+// }
+function checkIfUserLogged(userStore:any) {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+			 userStore.Logged();
+        userStore.setUserUID(user.uid);
+      // signUser();
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/firebase.User
+      const uid = user.uid;
+
+      // ...
+		} else {
+			console.log('nie zalogowany')
+      // User is signed out
+      // ...
+    }
+  });
+}
+
+export { signUser, createUser, logout, checkIfUserLogged };

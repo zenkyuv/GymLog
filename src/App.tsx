@@ -1,16 +1,14 @@
 import React, { useContext } from 'react';
-import Dashboard from './page-components/common/dashboard/dashboard';
+import Dashboard from './page-components/common/dashboard/dashboard.js';
 import { observer } from 'mobx-react-lite';
-import PageStore from './page-components/states-store/states/page-store';
-import MainPage from './page-components/mainpage';
-
+import PageStore from './page-components/states-store/states/page-store.js';
+import MainPage from './page-components/mainpage.js';
+// import './component-styles/index.css';
 const App = observer(() => {
-	const pageStore = useContext(PageStore)
-	return (
-		<>
-			{pageStore.dashboardVisible === false ? <MainPage /> : <Dashboard />}
-		</>
+  const pageStore = useContext(PageStore);
+  return (
+    <>{pageStore.dashboardVisible === false ? <MainPage /> : <Dashboard />}</>
   );
-})
+});
 
 export default App;
