@@ -1,14 +1,23 @@
 .row {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  align-content: center;
-  justify-items: center;
+ display: flex;
+  text-align: center;
+  justify-content: space-around;
+  flex-direction: row;
   gap: 1em;
+  max-width: 100%;
+  border-radius: 5px;
 }
-.row h1 {
-  margin-top: 1em;
+.add-panel {
+	height: 100%;
+	min-width: 200px;
+	flex: 1;
+
+}
+.info-panel {
+	margin: 1em;
+	min-width: 200px;
+	height: 90%;
+	flex: 2;
 }
 form {
   height: 300px;
@@ -52,22 +61,31 @@ h1 {
   gap: 1em;
 }
 
+.flex-wrap {
+	flex-wrap: wrap;
+	align-self: center;
+	height: 100%;
+	margin: 1em;
+	max-width: 100%;
+	width: 100%;
+}
+
 .MuiButton-root {
   width: 100px;
 }
 
 .column {
-  display: flex;
-  text-align: center;
-  justify-content: space-around;
-  flex-direction: row;
-  gap: 1em;
-  margin: 2em;
-  width: 100%;
-  max-width: 550px;
-  border: #888888 1px solid;
-  border-radius: 5px;
-  height: 373px;
+	  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  justify-items: center;
+  gap: 1.5em;
+}
+
+.column h1 {
+  margin-top: 1em;
 }
 
 @keyframes example {

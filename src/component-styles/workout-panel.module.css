@@ -1,12 +1,13 @@
 .workout-cnt {
   border: 1px solid rgba(224, 224, 224, 1);
-  width: 55%;
   display: flex;
   flex-direction: column;
   position: relative;
   align-self: flex-end;
   height: 400px;
 	min-width: 370px;
+	width: 100%;
+	height: 100%;
 }
 .time-cnt {
   height: 42px;
@@ -61,13 +62,29 @@
   opacity: 1;
 }
 
-.top {
+.add-button-top {
+	 display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  width: 40px;
+  height: 37px;
+  z-index: 1;
+  color: white;
+	align-self: center;
+  font-size: 2em;
+  background-color: #ed563b;
+  border: 1px solid #ed563b;
   position: absolute;
   right: 3em;
-  color: #ed563b;
-  font-size: 2.3em;
+	top: 0.1em;
   /* justify-self: flex-start;
 	align-self: flex-start; */
+}
+.add-button-top:hover {
+	cursor: pointer;
+  background-color: #f9735b;
+  opacity: 1;
 }
 .top:hover {
   background-color: #f9735b85;
@@ -81,11 +98,11 @@
 }
 
 .loading-indicator {
-  position: absolute;
-  top: 50%;
-  right: 50%;
-  width: 48px;
-  height: 45px;
+  display: flex;
+  border-radius: 50%;
+  width: 43px;
+  height: 40px;
+	align-self: center;
 }
 .categories {
   display: flex;

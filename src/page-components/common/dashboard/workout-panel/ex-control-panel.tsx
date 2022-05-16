@@ -102,9 +102,9 @@ function ControlPanel(data: any) {
   console.log(dbData.yearAndMonth);
   console.log(data.databaseTimeEqualsFrontend);
   return (
-    <div className={styles.row}>
+    <div className={`${styles.row} ${styles["flex-wrap"]}`}>
       {/* {show ? <span className="alert">Set weight or reps</span> : <span className="hidden">Set weight or reps</span>} */}
-      <form className={styles.row} onReset={handleReset} onSubmit={handleSubmit}>
+      <form className={`${styles.column} ${styles["add-panel"]}`} onReset={handleReset} onSubmit={handleSubmit}>
         <h1>{data.exercise}</h1>
         WEIGHT(kgs):
         <TextField
@@ -161,7 +161,7 @@ function ControlPanel(data: any) {
         </div>
       </form>
       {data.databaseTimeEqualsFrontend ? (
-        <div className={styles.column}>
+        <div className={`${styles.row} ${styles["info-panel"]}`}>
           <ClickAwayListener
             onClickAway={() => setSelectionModel([])}
             style={{ height: '100%', width: '100%' }}

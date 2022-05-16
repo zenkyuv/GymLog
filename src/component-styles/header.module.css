@@ -160,3 +160,8 @@ font & reset css
     left: 30px;
   }
 }
+
+.css-1w23xel {
+	max-width: 100vw !important;
+	background-color: red;
+}

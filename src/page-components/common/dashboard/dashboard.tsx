@@ -14,6 +14,7 @@ import statisticsIcon from '../../../images/statistics-icon.svg';
 import logoutIcon from '../../../images/logout-icon.svg';
 import { logout } from '../../auth.js';
 import PageStore from '../../states-store/states/page-store.js';
+import { style } from '@mui/system';
 
 const Dashboard = observer(() => {
   const [yearAndMonth, setYearAndMonth]: any = useState(today);
@@ -122,7 +123,13 @@ const Dashboard = observer(() => {
             </li>
           </ul>
         </div>
-				{showComponent}
+				<div className={styles.middle}>
+					<div className={styles.name}>
+						<h1>Hi, nazwa</h1>
+						<p>Plan your days to be more productive.</p>
+					</div>
+					{showComponent}
+				</div>
         <div className={styles["user-info-bar"]}>
           <h3>
             <span> My Profile</span> <span>..</span>

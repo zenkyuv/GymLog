@@ -1,16 +1,16 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import styles from '../../component-styles/header.module.css';
 import { logout } from '../auth';
-import Register from '../register-login-panel';
+import SignIn from '../signin-panel';
 import { observer } from 'mobx-react-lite';
 import UserStore from '../states-store/states/user-store';
 import PageStore from '../states-store/states/page-store';
 import classNames from 'classnames';
-
 const Header = observer((css: any) => {
+	
   const userStore = useContext(UserStore);
   const pageStore = useContext(PageStore);
-  const [clicked, setClick] = useState(false);
+	const [clicked, setClick] = useState(false);
   useEffect(() => {
     if (userStore.userLogged) {
       setClick(false);
@@ -55,7 +55,7 @@ const Header = observer((css: any) => {
             {userStore.userLogged === false ? (
               <li className={styles["main-button"]}>
                 <a href="#/" onClick={() => setClick(true)}>
-                  Sign up
+                  Sign in
                 </a>
               </li>
             ) : (
@@ -71,7 +71,7 @@ const Header = observer((css: any) => {
           {/* </a> */}
         </div>
       </nav>
-      {clicked === true && userStore.userLogged === false ? <Register /> : null}
+			{clicked && userStore.userLogged === false ? <SignIn setClick={setClick} /> : null}
     </header>
   );
 });

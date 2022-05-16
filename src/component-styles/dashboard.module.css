@@ -57,6 +57,21 @@
   font-size: 2em;
 } */
 
+.name {
+	height: 20%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	background-color: gray;
+	border-radius: 20px;
+	padding: 1em;
+}
+.name h1, p {
+	text-align: left;
+}
+.name p {
+	color: white;
+}
 .MuiPickerStaticWrapper-root {
   /* width: 500px;
 	height: 500px; */
@@ -102,4 +117,12 @@ span {
   flex-direction: column;
   gap: 1em;
   align-items: center;
+	flex: 15%;
+}
+
+.middle {
+	flex: 70%;
+	display: flex;
+	flex-direction: column;
+	gap: 30px;
 }

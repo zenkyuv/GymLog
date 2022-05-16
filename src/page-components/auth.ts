@@ -28,9 +28,16 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore();
 const auth: any = getAuth();
 
-function createUser(e: any, email: any, password: any, userStore: any) {
-  e.preventDefault();
-  createUserWithEmailAndPassword(auth, email.value, password.value).then(
+interface signUserInfo {
+	userData: FormData
+	userStore: any,
+	setLoadingIndicator?: any
+}
+
+function createUser({ userData, userStore }: signUserInfo) {
+	const email:string = userData.get('email').toString()
+	const password:string = userData.get('password').toString()
+  createUserWithEmailAndPassword(auth, email, password).then(
     (cred: any) => {
       const user = cred.user;
       if (user) {
@@ -45,31 +52,20 @@ function createUser(e: any, email: any, password: any, userStore: any) {
   );
 }
 
-interface UserInfo {
-	email: HTMLInputElement
-	password: HTMLInputElement
-}
-interface signUserInfo {
-	e: Event,
-	user: UserInfo
-	userStore: any,
-	setLoadingIndicator: any
-}
 function signUser (
-    {e,
-		user,
+		{userData,
     userStore,
     setLoadingIndicator}: signUserInfo
 ) {
-	const email = user.email.value
-	const password = user.password.value
+	const email:string = userData.get('email').toString()
+	const password:string = userData.get('password').toString()
 console.log(email,password)
-	e.preventDefault();
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Signed in
       const user = userCredential.user;
-      if (user) {
+			if (user) {
+				console.log('zalogowany')
         userStore.Logged();
         userStore.setUserUID(user.uid);
         setLoadingIndicator(false);

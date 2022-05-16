@@ -8,7 +8,8 @@ import postcss from 'rollup-plugin-postcss';
 
 export default {
   input: 'src/index.tsx',
-  output: {
+	output: {
+		sourcemap: true,
     dir: 'src-x/output',
     format: 'iife',
   },
@@ -17,7 +18,7 @@ export default {
 			extract: true,
 			modules: true
 		}),
-    typescript(),
+		typescript({ sourceMap: false}),
     // css(),
     image(),
     commonjs(),

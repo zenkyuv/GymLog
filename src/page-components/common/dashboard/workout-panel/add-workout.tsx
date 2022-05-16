@@ -26,7 +26,7 @@ const WorkoutPanel = observer(
       controlPanel: false,
     });
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
-    type addButton = 'add-button top' | 'add-button';
+    type addButton = 'add-button-top' | 'add-button';
     const [category, setCategory]: any = useState(undefined);
     const categories = [
       'Shoulders',
@@ -74,10 +74,11 @@ const WorkoutPanel = observer(
       onYearAndMonthChange,
       userStore
     );
-    const addExerciseBtn = (css: addButton) => {
+		const addExerciseBtn = (css: addButton) => {
+			console.log(css)
       return (
         <div
-          className={css}
+          className={styles[css]}
           onClick={() => {
             setExercisesPanel({ showExercise: true });
             setCategory(undefined);
@@ -116,13 +117,13 @@ const WorkoutPanel = observer(
         {databaseTimeEqualsFrontend && !showExercises.controlPanel ? (
           <div className={styles["flex-row time-center"]}>
             {changeTimeBtns}
-            {addExerciseBtn(styles['add-button top'])}
+            {addExerciseBtn('add-button-top')}
           </div>
         ) : (
           <div className={styles["flex-row time-center"]}>{changeTimeBtns}</div>
         )}
         {userStore.dbDataLoading && !showExercises.controlPanel ? (
-          <div>
+          <div className={styles.center}>
             <img
               alt="loading"
               className={styles["loading-indicator"]}
@@ -153,7 +154,7 @@ const WorkoutPanel = observer(
               <div>{reps ? reps.map((e: any) => <p>{e}reps</p>) : null}</div> */}
           </div>
         ) : !showExercises.controlPanel ? (
-          <div className={styles.center}>{addExerciseBtn(styles['add-button'])}</div>
+          <div className={styles.center}>{addExerciseBtn('add-button')}</div>
         ) : (
           <ControlPanel
             databaseTimeEqualsFrontend={databaseTimeEqualsFrontend}
