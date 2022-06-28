@@ -1,10 +1,12 @@
+import { SetExercisePanel, WorkoutOptions } from '../../../../types/interfaces';
+import { UserStore } from '../../../states-store/states/user-store';
 import ControlPanel from './ex-control-panel';
 
 function shoulderExercises(
-  category: any,
-  userStore: any,
-  yearAndMonth: any,
-  setExercisesPanel: any
+  category: string,
+  userStore: UserStore,
+  yearAndMonth: number[],
+  setExercisesPanel: React.Dispatch<React.SetStateAction<SetExercisePanel>>
 ) {
   const exercises = ['Overhead press'];
 

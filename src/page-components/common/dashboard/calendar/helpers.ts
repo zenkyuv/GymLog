@@ -16,7 +16,7 @@ export const daysOfWeek = [
   'Saturday',
 ];
 
-export function getYearDropdownOptions(currentYear: any) {
+export function getYearDropdownOptions(currentYear: number) {
   let minYear = currentYear - 4;
   let maxYear = currentYear + 5;
   return range(minYear, maxYear + 1).map((y) => ({ label: `${y}`, value: y }));
@@ -31,11 +31,11 @@ export function getMonthDropdownOptions() {
   }));
 }
 
-export function getNumberOfDaysInMonth(year: any, month: any) {
+export function getNumberOfDaysInMonth(year: number, month: number) {
   return dayjs(`${year}-${month}-01`).daysInMonth();
 }
 
-export function createDaysForCurrentMonth(year: any, month: any) {
+export function createDaysForCurrentMonth(year: number, month: number) {
   return [...Array(getNumberOfDaysInMonth(year, month))].map((_, index) => {
     return {
       dateString: dayjs(`${year}-${month}-${index + 1}`).format('YYYY-MM-DD'),
@@ -46,9 +46,9 @@ export function createDaysForCurrentMonth(year: any, month: any) {
 }
 
 export function createDaysForPreviousMonth(
-  year: any,
-  month: any,
-  currentMonthDays: any
+  year: number,
+  month: number,
+  currentMonthDays: { dateString: string | number | Date | dayjs.Dayjs; }[]
 ) {
   const firstDayOfTheMonthWeekday = getWeekday(currentMonthDays[0].dateString);
   const previousMonth = dayjs(`${year}-${month}-01`).subtract(1, 'month');
@@ -73,9 +73,9 @@ export function createDaysForPreviousMonth(
 }
 
 export function createDaysForNextMonth(
-  year: any,
-  month: any,
-  currentMonthDays: any
+  year: number,
+  month: number,
+  currentMonthDays: string | any[]
 ) {
   const lastDayOfTheMonthWeekday = getWeekday(
     `${year}-${month}-${currentMonthDays.length}`
@@ -96,21 +96,21 @@ export function createDaysForNextMonth(
 }
 
 // sunday === 0, saturday === 6
-export function getWeekday(dateString: any) {
+export function getWeekday(dateString: string | number | Date | dayjs.Dayjs) {
   return dayjs(dateString).weekday();
 }
 
-export function isWeekendDay(dateString: any) {
+export function isWeekendDay(dateString: string | number | Date | dayjs.Dayjs) {
   return [6, 0].includes(getWeekday(dateString));
 }
 
-export const today = new Date()
+export const today:number[] = new Date()
   .toISOString()
   .slice(0, 10)
   .split('-')
   .map((e) => Number(e));
-export const [yearNow, monthNow, dayNow]: any = today;
+export const [yearNow, monthNow, dayNow] = today;
 export const daysOfCurrentMonths = new Date(yearNow, monthNow, 0).getDate();
-export const isToday = (year: any, month: any, day: any) => {
+export const isToday = (year: number, month: number, day: number) => {
   return day === dayNow && month === monthNow && year === yearNow;
 };

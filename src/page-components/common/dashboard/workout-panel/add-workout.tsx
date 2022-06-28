@@ -1,5 +1,4 @@
 import styles from  '../../../../component-styles/workout-panel.module.css';
-import { isToday } from '../calendar/helpers.js';
 import { renderButtons } from '../calendar/calendar-buttons.js';
 import { useContext, useEffect, useState } from 'react';
 import shoulderExercises from './shoulderExercises.js';
@@ -7,6 +6,7 @@ import UserStore from '../../../states-store/states/user-store.js';
 import ControlPanel from './ex-control-panel.js';
 import { observer } from 'mobx-react';
 import loadingIndicator from '../../../../images/loading-indicator-2.svg';
+import ShouldersImg from "../../../../images/ohp.jpg"
 import {
   DataGrid,
   GridColDef,
@@ -14,39 +14,42 @@ import {
   GridRowsProp,
 } from '@mui/x-data-grid';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
+import { WorkoutOptions } from '../../../../types/interfaces';
 
 const WorkoutPanel = observer(
-  ({ component, yearAndMonth, onYearAndMonthChange }: any) => {
+	({ component, yearAndMonth, onYearAndMonthChange }: WorkoutOptions) => {
+		
     const userStore = useContext(UserStore);
     const [year, month, day] = yearAndMonth;
-    const [showExercises, setExercisesPanel]: any = useState({
+    const [showExercises, setExercisesPanel] = useState({
       showExercise: false,
       category: undefined,
       exercise: undefined,
       controlPanel: false,
     });
     const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
-    type addButton = 'add-button-top' | 'add-button';
-    const [category, setCategory]: any = useState(undefined);
+		type AddButton = 'add-button-top' | 'add-button';
+
+		const [category, setCategory] = useState<undefined | string>(undefined);
+		const Shoulders = {
+			name: "Shoulders",
+			image: ShouldersImg
+		}
     const categories = [
-      'Shoulders',
+      "Shoulders",
       'Triceps',
       'Biceps',
       'Chest',
       'Back',
       'Legs',
       'Abs',
-    ];
-    const componentBetween = (
-      <h1 className={styles.time}>
-        {isToday(year, month, day) ? 'Today' : `${year}-${month}-${day}`}
-      </h1>
-    );
+		];
+
     function exercises() {
       return (
         <div className={styles.categories}>
           {category === undefined
-            ? categories.map((category, i) => (
+						? categories.map((category: string, i) => (
                 <div
                   key={i}
                   onClick={() => setCategory(category)}
@@ -67,28 +70,27 @@ const WorkoutPanel = observer(
       );
     }
     const changeTimeBtns = renderButtons(
-      setExercisesPanel,
-      componentBetween,
+      {setExercisesPanel,
       component,
       yearAndMonth,
       onYearAndMonthChange,
-      userStore
+      userStore}
     );
-		const addExerciseBtn = (css: addButton) => {
-			console.log(css)
-      return (
-        <div
-          className={styles[css]}
-          onClick={() => {
-            setExercisesPanel({ showExercise: true });
-            setCategory(undefined);
-          }}
-        >
-          +
-        </div>
-      );
-    };
-    const data = userStore.workoutData;
+		const addExerciseBtn = (css: AddButton) => {
+			return (
+				<div
+					className={styles[css]}
+					onClick={() => {
+						setExercisesPanel(prev => ({ ...prev, showExercise: true }));
+						setCategory(undefined);
+					}}
+				>
+					+
+				</div>
+			);
+		};
+
+		const data = userStore.workoutData
     const [databaseYear, databaseMonth, databaseDay] = data.yearAndMonth
       ? data.yearAndMonth
       : [0, 0, 0];
@@ -101,7 +103,7 @@ const WorkoutPanel = observer(
     const index = weight;
     const rows: GridRowsProp =
       index !== undefined
-        ? index.map((e: any, i: any) => ({
+        ? index.map((_e, i) => ({
             id: i + 1,
             weight: weight[i],
             reps: reps[i],
@@ -142,7 +144,7 @@ const WorkoutPanel = observer(
             >
               <DataGrid
                 selectionModel={selectionModel}
-                onSelectionModelChange={({ selectionModel }: any) =>
+                onSelectionModelChange={(selectionModel) =>
                   setSelectionModel(selectionModel)
                 }
                 rows={rows}

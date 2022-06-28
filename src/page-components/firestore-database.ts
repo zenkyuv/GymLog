@@ -1,3 +1,4 @@
+import { GridRowId } from '@mui/x-data-grid/models/gridRows';
 import {
   collection,
   deleteField,
@@ -11,6 +12,7 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
+import { UserStore } from './states-store/states/user-store';
 
 // const databaseData = (userStore: any) => {
 //   const db = getFirestore();
@@ -53,21 +55,20 @@ import {
 // };
 
 const setDocument = async (
-  userStore: any,
-  exercise: any,
-  category: any,
-  yearAndMonth: any,
-  reps: any,
-  weight: any,
-  action: any,
-  indexToRemove: any
+  userStore: UserStore,
+  exercise: string,
+  category: string,
+  yearAndMonth: number[],
+  reps: number[] | number,
+  weight: number[] | number,
+  action: string,
+  indexToRemove: GridRowId[]
 ) => {
   const db = getFirestore();
   const [year, month, day] = yearAndMonth;
   const userReps = userStore.workoutData.reps;
   const userWeight = userStore.workoutData.weight;
-  console.log(userStore.workoutData.yearAndMonth);
-  const timeData: any = yearAndMonth.toString().split(',').join('-');
+  const timeData = yearAndMonth.toString().split(',').join('-');
   getData(userStore, yearAndMonth);
   const repsCopy = userReps ? [...userStore.workoutData.reps] : [reps];
   const weightCopy = userWeight ? [...userStore.workoutData.weight] : [weight];
@@ -78,11 +79,10 @@ const setDocument = async (
       weightCopy.push(weight);
     }
   }
-  if (action === 'remove') {
-    console.log(repsCopy);
-    console.log(indexToRemove[0]);
-    repsCopy.splice(indexToRemove[0] - 1, 1);
-    weightCopy.splice(indexToRemove[0] - 1, 1);
+	if (action === 'remove') {
+		console.log('remove')
+    repsCopy.splice(Number(...indexToRemove) - 1, 1);
+    weightCopy.splice(Number(...indexToRemove) - 1, 1);
     // yearAndMonthCopy.splice(0, 3);
     // console.log(yearAndMonthCopy);
   }
@@ -103,7 +103,7 @@ const setDocument = async (
     { merge: true }
   );
 };
-async function getData(userStore: any, yearAndMonth: any) {
+async function getData(userStore: UserStore, yearAndMonth: number[]) {
   console.log();
   userStore.isDbDataLoading(true);
   const [year, month, day] = yearAndMonth;

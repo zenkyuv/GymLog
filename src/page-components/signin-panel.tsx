@@ -114,8 +114,8 @@ import { useContext, useState } from 'react';
 import UserStore from './states-store/states/user-store';
 import SignUp from './signup-panel';
 import styles from "../component-styles/header.module.css"
+import { SignProps } from '../types/interfaces';
 
-const setLoadingIndicator = false;
 function Copyright(props: any) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -130,8 +130,8 @@ function Copyright(props: any) {
 }
 
 const theme = createTheme();
-export function SignIn(props: any) {
-	console.log(props)
+export function SignIn({ setClick }: SignProps) {
+	console.log(setClick)
 	const userStore = useContext(UserStore);
 	const [showSignUp, setSignUp] = useState(false)
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -145,7 +145,7 @@ export function SignIn(props: any) {
               {
               userData,
               userStore,
-              setLoadingIndicator}
+										}
             );
   };
 
@@ -216,7 +216,7 @@ export function SignIn(props: any) {
               fullWidth
 							variant="contained"
 							color='secondary'
-							onClick={() => props.setClick(false)}
+							onClick={() => setClick(false)}
               sx={{ mt: 1, mb: 2 }}
             >
               Cancel
@@ -237,7 +237,7 @@ export function SignIn(props: any) {
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
-		</ThemeProvider> : <SignUp setClick={props.setClick} />
+		</ThemeProvider> : <SignUp setClick={setClick} />
 }
 
 export default SignIn;

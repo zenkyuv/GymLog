@@ -14,24 +14,25 @@ import statisticsIcon from '../../../images/statistics-icon.svg';
 import logoutIcon from '../../../images/logout-icon.svg';
 import { logout } from '../../auth.js';
 import PageStore from '../../states-store/states/page-store.js';
-import { style } from '@mui/system';
+import twoDots from "../../../images/two-dots.svg"
 
 const Dashboard = observer(() => {
-  const [yearAndMonth, setYearAndMonth]: any = useState(today);
+	const [yearAndMonth, setYearAndMonth] = useState(today);
+	console.log(yearAndMonth, setYearAndMonth)
   const savedComponent = useRef('home');
   const userStore = useContext(UserStore);
   const pageStore = useContext(PageStore);
   const [trainingData, setData] = useState(undefined);
   const [selectedDate, handleDateChange] = useState(new Date());
-  console.log(today);
   var dt = new Date();
   var month = dt.getMonth();
   var year = dt.getFullYear();
   const weekday = dt.toLocaleString('default', { weekday: 'short' });
-  const daysInMonth = new Date(year, month, 0).getDate();
+	const daysInMonth = new Date(year, month, 0).getDate();
+
   let component = undefined;
-  const [showComponent, setComponent]: any = useReducer(reducer, component);
-  function reducer(state: any, action: any) {
+  const [showComponent, setComponent] = useReducer(reducer, component);
+  function reducer(state: any, action: string) {
     if (action === 'home') {
       savedComponent.current = 'home';
       return (component = (
@@ -49,9 +50,7 @@ const Dashboard = observer(() => {
           yearAndMonth={yearAndMonth}
           onYearAndMonthChange={setYearAndMonth}
           renderDay={(calendarDayObject) => (
-            <div>
               <CalendarDayHeader calendarDayObject={calendarDayObject} />
-            </div>
           )}
         />
       ));
@@ -128,11 +127,13 @@ const Dashboard = observer(() => {
 						<h1>Hi, nazwa</h1>
 						<p>Plan your days to be more productive.</p>
 					</div>
-					{showComponent}
+					<div className={styles.component}>
+						{showComponent}
+					</div>
 				</div>
         <div className={styles["user-info-bar"]}>
           <h3>
-            <span> My Profile</span> <span>..</span>
+            <span> My Profile</span> <img src={twoDots} alt="" />
           </h3>
           <div className={styles["user-avatar"]}>PG</div>
           <h3>Przemek Galezki</h3>

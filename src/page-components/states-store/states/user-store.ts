@@ -1,14 +1,19 @@
 import { action, makeObservable } from 'mobx';
 import { observable } from 'mobx';
 import { createContext } from 'react';
-import { useState } from 'react';
-
+import { WorkoutData } from '../../../types/interfaces';
 export class UserStore {
-  @observable userLogged:boolean = false;
-  userUID:string = '';
-  @observable workoutData: any = [];
-  choosenExercise:any[] = [];
-  @observable dbDataLoading: boolean = true;
+  @observable userLogged = false;
+  userUID = '';
+	@observable workoutData:WorkoutData = {
+		category: undefined,
+		exercise: undefined,
+		reps: [],
+		weight: [],
+		yearAndMonth: []
+	};
+  choosenExercise = [];
+  @observable dbDataLoading = true;
 
   constructor() {
     makeObservable(this);
@@ -25,14 +30,24 @@ export class UserStore {
   }
 
   @action
-  setUserUID(uid: any) {
+  setUserUID(uid: string) {
     this.userUID = uid;
   }
 
   @action
-  setWorkoutData(data: any) {
+  setWorkoutData(data: WorkoutData) {
     this.workoutData = data;
   }
+
+	@action clearWorkoutData() {
+		this.workoutData = {
+		category: undefined,
+		exercise: undefined,
+		reps: [],
+		weight: [],
+		yearAndMonth: []
+		}
+	}
 
   @action
   isDbDataLoading(boolean: boolean) {

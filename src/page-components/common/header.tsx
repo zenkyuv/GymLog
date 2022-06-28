@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite';
 import UserStore from '../states-store/states/user-store';
 import PageStore from '../states-store/states/page-store';
 import classNames from 'classnames';
-const Header = observer((css: any) => {
+const Header = observer((css: String) => {
 	
   const userStore = useContext(UserStore);
   const pageStore = useContext(PageStore);

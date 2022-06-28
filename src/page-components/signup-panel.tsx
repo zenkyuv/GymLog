@@ -17,6 +17,7 @@ import SignIn from './signin-panel';
 import Header from './common/header';
 import UserStore from './states-store/states/user-store';
 import { createUser } from './auth';
+import { SignProps } from '../types/interfaces';
 
 function Copyright(props: any) {
   return (
@@ -33,8 +34,7 @@ function Copyright(props: any) {
 
 const theme = createTheme();
 
-export function SignUp(props: any) {
-	console.log(props)
+export function SignUp({setClick}: SignProps) {
 	const userStore = useContext(UserStore);
 	const [showSignIn, setSignIn] = useState(false)
 	const [showHeader, setHeader] = useState(false)
@@ -137,7 +137,7 @@ export function SignUp(props: any) {
               Sign Up
 						</Button>
 						<Button
-							onClick={() => props.setClick(false)}
+							onClick={() => setClick(false)}
               type="submit"
               fullWidth
 							variant="contained"

@@ -1,23 +1,18 @@
-import { daysOfCurrentMonths } from './helpers.js';
+import { daysOfCurrentMonths, isToday } from './helpers.js';
 import styles from "../../../../component-styles/workout-panel.module.css"
+import { WorkoutOptions } from '../../../../types/interfaces.js';
 
 export function handleMonthNavBackButtonClick({
   setExercisesPanel,
   component,
   yearAndMonth,
-  onYearAndMonthChange,
-  userStore,
-}: {
-  setExercisesPanel?: any;
-  component: string;
-  yearAndMonth: any;
-  onYearAndMonthChange: any;
-  userStore: any;
-}) {
+	onYearAndMonthChange,
+	userStore
+}: WorkoutOptions) {
   console.log(yearAndMonth);
   const [year, month, day] = yearAndMonth;
   let prevDay = day - 1;
-  userStore.workoutData = [];
+	userStore.clearWorkoutData()
   let nextYear = year;
   let nextMonth = month;
   if (component === 'workoutPanel') {
@@ -47,18 +42,12 @@ export function handleMonthNavForwardButtonClick({
   yearAndMonth,
   onYearAndMonthChange,
   userStore,
-}: {
-  setExercisesPanel?: any;
-  component: any;
-  yearAndMonth: any;
-  onYearAndMonthChange: any;
-  userStore: any;
-}) {
+}: WorkoutOptions) {
   const [year, month, day] = yearAndMonth;
   let nextYear = year;
   let nextMonth = month;
   let nextDay = day + 1;
-  userStore.workoutData = [];
+  userStore.clearWorkoutData()
   if (component === 'workoutPanel') {
     setExercisesPanel({
       showExercise: false,
@@ -81,13 +70,13 @@ export function handleMonthNavForwardButtonClick({
 }
 
 export function renderButtons(
-  setExercisesPanel: any,
-  componentBetween: any,
-  component: any,
-  yearAndMonth: any,
-  onYearAndMonthChange: any,
-  userStore: any
+  {setExercisesPanel,
+  component,
+  yearAndMonth,
+  onYearAndMonthChange,
+  userStore}: Required<WorkoutOptions>
 ) {
+	const [year, month, day] = yearAndMonth;
   return (
     <div className={styles["time-cnt"]}>
       <button
@@ -104,7 +93,9 @@ export function renderButtons(
       >
         {'<'}
       </button>
-      {componentBetween}
+       <h1 className={styles.time}>
+        {isToday(year, month, day) ? 'Today' : `${year}-${month}-${day}`}
+      </h1>
       <button
         className={styles["button-margin"]}
         onClick={() =>

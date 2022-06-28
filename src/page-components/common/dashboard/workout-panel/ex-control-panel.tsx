@@ -10,9 +10,14 @@ import {
   GridRowId,
 } from '@mui/x-data-grid';
 import { ClickAwayListener } from '@mui/material';
-function ControlPanel(data: any) {
+import { ControlPanelData } from '../../../../types/interfaces';
+
+function ControlPanel(
+	{ userStore, exercise, category, yearAndMonth, databaseTimeEqualsFrontend }:
+		ControlPanelData) {
   const [show, setShowEl] = useState(false);
-  const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
+	const [selectionModel, setSelectionModel] = useState<GridRowId[]>([]);
+	console.log(userStore, exercise, 4)
   interface State {
     weight: number | string;
     reps: number | string;
@@ -33,20 +38,18 @@ function ControlPanel(data: any) {
         setValues({ ...values, [prop]: event.target.value });
       }
     };
-  function handleSubmit(e: any) {
-    console.log(e);
+  function handleSubmit() {
     console.log('submit');
-    e.preventDefault();
     const reps = Number(values.reps);
     const weight = Number(values.weight);
     const isEmpty = values.reps === '' || values.weight === '';
     if (weight >= 0 && reps >= 0) {
       console.log('sent');
       setDocument(
-        data.userStore,
-        data.exercise,
-        data.category,
-        data.yearAndMonth,
+        userStore,
+        exercise,
+        category,
+        yearAndMonth,
         reps,
         weight,
         'add',
@@ -60,36 +63,40 @@ function ControlPanel(data: any) {
     }
   }
   console.log(selectionModel);
-  function handleReset(e: any) {
+  function handleReset() {
     setValues({
       weight: 0,
       reps: 0,
     });
     console.log(values);
     console.log('reset');
-  }
-  const dbData = data.userStore.workoutData;
-  const weight = dbData !== undefined ? dbData.weight : null;
-  const reps = dbData !== undefined ? dbData.reps : null;
-  console.log(weight, reps);
-  const index = weight;
-  const isSelected = selectionModel.length > 0;
-  console.log(isSelected);
-  console.log(index);
-  const rows: GridRowsProp =
+	}
+	
+
+	const loadDatabaseData = () => {
+	const dbData = userStore.workoutData;
+	console.log(userStore.workoutData)
+	const weight = dbData !== undefined ? dbData.weight : null;
+	const reps = dbData !== undefined ? dbData.reps : null;
+	const index = weight;
+	const rows: GridRowsProp =
     index !== undefined
-      ? index.map((e: any, i: any) => ({
+      ? index.map((_e, i) => ({
           id: i + 1,
-          weight: weight[i],
+          weight: weight [i],
           reps: reps[i],
         }))
-      : [];
+				: [];
+		return {weight, reps, rows}
+	}
+	const databaseData = loadDatabaseData()
+	const isSelected = selectionModel.length > 0;
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'Set', width: 180 },
     { field: 'weight', headerName: 'Weight', width: 180 },
     { field: 'reps', headerName: 'Reps', width: 180 },
-  ];
-  function getSelectedRow(row: any) {
+	];
+  function getSelectedRow(row: { row: { weight: number; reps: number; }; }) {
     console.log(row);
     if (row) {
       setValues({
@@ -98,14 +105,12 @@ function ControlPanel(data: any) {
       });
     }
   }
-  console.log(rows, columns);
-  console.log(dbData.yearAndMonth);
-  console.log(data.databaseTimeEqualsFrontend);
+
   return (
     <div className={`${styles.row} ${styles["flex-wrap"]}`}>
       {/* {show ? <span className="alert">Set weight or reps</span> : <span className="hidden">Set weight or reps</span>} */}
       <form className={`${styles.column} ${styles["add-panel"]}`} onReset={handleReset} onSubmit={handleSubmit}>
-        <h1>{data.exercise}</h1>
+        <h1>{exercise}</h1>
         WEIGHT(kgs):
         <TextField
           type="number"
@@ -125,7 +130,7 @@ function ControlPanel(data: any) {
         <div className={styles["flex-gap"]}>
           <Button
             type="submit"
-            onClick={() => getData(data.userStore, data.yearAndMonth)}
+            onClick={() => getData(userStore, yearAndMonth)}
             variant="contained"
             color="success"
           >
@@ -134,22 +139,22 @@ function ControlPanel(data: any) {
           <Button
             type="reset"
             color={isSelected ? 'error' : 'primary'}
-            onClick={() => getData(data.userStore, data.yearAndMonth)}
+            onClick={() => getData(userStore, yearAndMonth)}
             variant="contained"
           >
             {isSelected ? (
-              <span
-                onClick={() =>
-                  setDocument(
-                    data.userStore,
-                    data.exercise,
-                    data.category,
-                    data.yearAndMonth,
-                    reps,
-                    weight,
-                    'remove',
-                    selectionModel
-                  )
+							<span
+								onClick={() =>
+									setDocument(
+										userStore,
+										exercise,
+										category,
+										yearAndMonth,
+										databaseData.reps,
+										databaseData.weight,
+										'remove',
+										selectionModel
+									)
                 }
               >
                 Delete
@@ -160,25 +165,25 @@ function ControlPanel(data: any) {
           </Button>
         </div>
       </form>
-      {data.databaseTimeEqualsFrontend ? (
+      
         <div className={`${styles.row} ${styles["info-panel"]}`}>
           <ClickAwayListener
             onClickAway={() => setSelectionModel([])}
             style={{ height: '100%', width: '100%' }}
           >
             <DataGrid
-              rows={rows}
+              rows={databaseData.rows}
               pageSize={5}
               columns={columns}
               selectionModel={selectionModel}
               onSelectionModelChange={
-                (selectionModel: any) => setSelectionModel(selectionModel)
+                (selectionModel) => setSelectionModel(selectionModel)
                 // console.log(selectionModel)
               }
             />
           </ClickAwayListener>
         </div>
-      ) : null}
+      
     </div>
   );
 }

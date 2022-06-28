@@ -10,8 +10,10 @@ import {
 } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { doc, getFirestore, setDoc } from 'firebase/firestore';
-import UserStore from './states-store/states/user-store';
+import {UserStore} from './states-store/states/user-store';
 import { useContext } from 'react';
+import { PageStore } from './states-store/states/page-store';
+import { SignUserInfo } from '../types/interfaces';
 // import { databaseData } from './firestore-database';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -26,17 +28,11 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore();
-const auth: any = getAuth();
+const auth = getAuth();
 
-interface signUserInfo {
-	userData: FormData
-	userStore: any,
-	setLoadingIndicator?: any
-}
-
-function createUser({ userData, userStore }: signUserInfo) {
-	const email:string = userData.get('email').toString()
-	const password:string = userData.get('password').toString()
+function createUser({ userData, userStore }: SignUserInfo) {
+	const email = userData.get('email').toString()
+	const password = userData.get('password').toString()
   createUserWithEmailAndPassword(auth, email, password).then(
     (cred: any) => {
       const user = cred.user;
@@ -54,12 +50,11 @@ function createUser({ userData, userStore }: signUserInfo) {
 
 function signUser (
 		{userData,
-    userStore,
-    setLoadingIndicator}: signUserInfo
+    userStore}: SignUserInfo
 ) {
-	const email:string = userData.get('email').toString()
-	const password:string = userData.get('password').toString()
-console.log(email,password)
+	const email = userData.get('email').toString()
+	const password = userData.get('password').toString()
+console.log(userStore)
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Signed in
@@ -68,7 +63,6 @@ console.log(email,password)
 				console.log('zalogowany')
         userStore.Logged();
         userStore.setUserUID(user.uid);
-        setLoadingIndicator(false);
         // SetPr(email.value, password.value);
         // databaseData(userStore);
       }
@@ -83,7 +77,7 @@ console.log(email,password)
     });
 }
 
-function logout(userStore: any, pageStore: any) {
+function logout(userStore: UserStore, pageStore: PageStore) {
   signOut(auth)
     .then(() => {
       pageStore.makeDashboardNotVisible();
@@ -112,7 +106,7 @@ function logout(userStore: any, pageStore: any) {
 //       const errorMessage = error.message;
 //     });
 // }
-function checkIfUserLogged(userStore:any) {
+function checkIfUserLogged(userStore: UserStore) {
   onAuthStateChanged(auth, (user) => {
     if (user) {
 			 userStore.Logged();
