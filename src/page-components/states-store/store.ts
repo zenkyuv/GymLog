@@ -1,6 +1,6 @@
-import React from "react";
-import { UserStore } from "./states/user-store";
-import { PageStore } from "./states/page-store";
+import React from "react"
+import { UserStore } from "./states/user-store"
+import { PageStore } from "./states/page-store"
 
 export const stores = Object.freeze({
 	userStore: new UserStore(),

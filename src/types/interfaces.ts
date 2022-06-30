@@ -1,4 +1,4 @@
-import { UserStore } from "../page-components/states-store/states/user-store"
+import {UserStore} from "../page-components/states-store/states/user-store"
 
 export interface SignUserInfo {
 	userData: FormData
@@ -10,10 +10,10 @@ export interface SignProps {
 }
 
 export interface SetExercisePanel {
-    showExercise: boolean;
-    category: any;
-    exercise: any;
-    controlPanel: boolean;
+    showExercise: boolean
+    category: any
+    exercise: any
+    controlPanel: boolean
 }
 
 export interface WorkoutOptions {

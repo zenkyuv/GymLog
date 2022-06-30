@@ -1,42 +1,42 @@
-import { action, makeObservable } from 'mobx';
-import { observable } from 'mobx';
-import { createContext } from 'react';
-import { WorkoutData } from '../../../types/interfaces';
+import { action, makeObservable } from 'mobx'
+import { observable } from 'mobx'
+import { createContext } from 'react'
+import { WorkoutData } from '../../../types/interfaces'
 export class UserStore {
-  @observable userLogged = false;
-  userUID = '';
+  @observable userLogged = false
+  userUID = ''
 	@observable workoutData:WorkoutData = {
 		category: undefined,
 		exercise: undefined,
 		reps: [],
 		weight: [],
 		yearAndMonth: []
-	};
-  choosenExercise = [];
-  @observable dbDataLoading = true;
+	}
+  choosenExercise = []
+  @observable dbDataLoading = true
 
   constructor() {
-    makeObservable(this);
+    makeObservable(this)
   }
 
   @action
   NotLogged() {
-    this.userLogged = false;
+    this.userLogged = false
   }
 
   @action
   Logged() {
-    this.userLogged = true;
+    this.userLogged = true
   }
 
   @action
   setUserUID(uid: string) {
-    this.userUID = uid;
+    this.userUID = uid
   }
 
   @action
   setWorkoutData(data: WorkoutData) {
-    this.workoutData = data;
+    this.workoutData = data
   }
 
 	@action clearWorkoutData() {
@@ -52,9 +52,9 @@ export class UserStore {
   @action
   isDbDataLoading(boolean: boolean) {
     if (boolean) {
-      this.dbDataLoading = true;
+      this.dbDataLoading = true
     } else {
-      this.dbDataLoading = false;
+      this.dbDataLoading = false
     }
   }
 
@@ -64,8 +64,8 @@ export class UserStore {
       exercise: exercise,
       category: category,
       isSet: exercise && category ? true : false,
-    });
-  };
+    })
+  }
 }
 
-export default createContext(new UserStore());
+export default createContext(new UserStore())

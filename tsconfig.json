@@ -11,7 +11,7 @@
     // "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "NodeNext",
+    "module": "ESNext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "declaration": true,
