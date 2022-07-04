@@ -15,12 +15,13 @@
 }
 
 .nav-bar {
-  min-width: 70px;
+  min-width: 85px;
   background-color: rgb(46, 45, 45);
   color: white;
   display: flex;
   flex-direction: column;
   border-radius: 20px;
+	align-items: center;
 }
 .user-avatar {
   background-color: #ed563b;
@@ -55,6 +56,7 @@
 	justify-content: space-between;
 	max-width: 1800px;
 	width: 100%;
+	font-size: 0.7em;
 }
 /* .MuiButtonBase-root {
   font-size: 2em;
@@ -113,9 +115,6 @@ h3 {
 	width: 90%;
 	justify-content: space-between;
 }
-span {
-  margin-left: 1em;
-}
 
 .user-info-bar {
   display: flex;
@@ -137,4 +136,11 @@ span {
 
 .component {
 	height: 80%;
+}
+
+@media only screen and (max-width: 600px) {
+	.cnt-row {
+		flex-direction: column;
+		font-size: 0.6em;
+	}
 }
