@@ -62,7 +62,7 @@ const setDocument = async (
 }
 
 const getData = async (userStore: UserStore, yearAndMonth: number[]) => {
-
+	console.log("loaded")
 	userStore.isDbDataLoading(true)
 	const [year, month, day] = yearAndMonth
 	const timeData = yearAndMonth.toString().split(',').join('-')
@@ -82,9 +82,21 @@ const getData = async (userStore: UserStore, yearAndMonth: number[]) => {
 				weight: docSnap.data()[key].weight,
 			}
 			userStore.setWorkoutData(data)
+			return data
 		}
 	} else {
 		userStore.isDbDataLoading(false)
+		console.log("niema")
+			const data = {
+				category: undefined,
+				exercise: undefined,
+				// sets: docSnap.data()[key].sets,
+				yearAndMonth: undefined,
+				reps: undefined,
+				weight: undefined,
+		}
+		userStore.setWorkoutData(data)
+		return data
 		// doc.data() will be undefined in this case
 		// console.log('No such document!')
 	}
