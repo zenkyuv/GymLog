@@ -5,6 +5,7 @@ import {
 	signInWithEmailAndPassword,
 	createUserWithEmailAndPassword,
 } from 'firebase/auth'
+import { categories } from './common/dashboard/workout-panel/categories'
 import { initializeApp } from 'firebase/app'
 import { SignUserInfo } from '../types/interfaces'
 import {UserStore} from './states-store/states/user-store'
@@ -34,9 +35,12 @@ const createUser = ({ userData, userStore }: SignUserInfo) => {
 				userStore.setUserUID(user.uid)
 			}
 			return setDoc(doc(db, 'users', cred.user.uid), {
-				first: 'Ada',
-				last: 'Lovelace',
+				categories
 			})
+			// return setDoc(doc(db, 'users', cred.user.uid), {
+			// 	first: 'Ada',
+			// 	last: 'Lovelace',
+			// })
 		}
 	)
 }
@@ -51,6 +55,7 @@ const signUser = ({userData, userStore}: SignUserInfo) => {
 			if (user) {
 				console.log('zalogowany')
 				userStore.Logged()
+				console.log(user.uid)
 				userStore.setUserUID(user.uid)
 			}
 		})
@@ -78,6 +83,7 @@ const logout = (userStore: UserStore, pageStore: PageStore) => {
 const checkIfUserLogged = (userStore: UserStore) => {
 	onAuthStateChanged(auth, (user) => {
 		if (user) {
+			console.log("zalogowany")
 			userStore.Logged()
 			userStore.setUserUID(user.uid)
 			const uid = user.uid
