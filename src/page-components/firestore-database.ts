@@ -102,4 +102,21 @@ const getData = async (userStore: UserStore, yearAndMonth: number[]) => {
 	}
 }
 
-export { setDocument, getData }
+const renderCategoriesAndExercises = async (userStore: UserStore) => {
+	const db = getFirestore()
+	const docRef = doc(db, 'users', userStore.userUID)
+	const docSnap = await getDoc(docRef)
+	if (docSnap.exists()) {
+		for (let key in docSnap.data()) {
+			return docSnap.data()[key]
+		// 	const data = {
+		// 		category: docSnap.data()[key].category,
+		// 		exercise: docSnap.data()[key].exercise,
+		// 	}
+		// 	// userStore.setWorkoutData(data)
+		// 	return data
+		}
+	}
+}
+
+export { setDocument, getData, renderCategoriesAndExercises}
