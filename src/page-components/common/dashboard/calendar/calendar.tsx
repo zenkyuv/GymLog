@@ -6,14 +6,14 @@ import {
 	isWeekendDay,
 	getMonthDropdownOptions,
 	getYearDropdownOptions,
-} from './helpers.js'
+} from './helpers'
 import {
 	handleMonthNavBackButtonClick,
 	handleMonthNavForwardButtonClick,
-} from './calendar-buttons.js'
+} from './calendar-buttons'
 import classNames from 'classnames'
-import { ChangeEvent, useContext } from 'react'
-import UserStore from '../../../states-store/states/user-store.js'
+import { ChangeEvent, useContext, useEffect, useState } from 'react'
+import UserStore from '../../../states-store/states/user-store'
 import styles from '../../../../component-styles/calendar.module.css'
 
 export const Calendar = ({
@@ -30,10 +30,20 @@ export const Calendar = ({
 	renderDay: (day: any) => JSX.Element
 	}) => {
 
-	const [year, month] = yearAndMonth
+	let [year, month] = yearAndMonth
 	const userStore = useContext(UserStore)
+	type exercises = {
+		"Shoulders": string,
+		"Legs": string
+	}
+	const [category, setCategory] = useState<exercises>()
 	const [yearNow, monthNow, dayNow]: number[] = today
-
+	function getWorkoutCategory(day: { dateString: any; dayOfMonth?: number; isCurrentMonth?: boolean }) {
+		const yearAndMonth = day.dateString.split("-").map((element: any) => {
+			return Number(element)
+		})
+		// return getData(userStore, yearAndMonth).then(e => e.category)
+	}
 	let currentMonthDays = createDaysForCurrentMonth(year, month)
 	let previousMonthDays = createDaysForPreviousMonth(
 		year,
@@ -62,11 +72,19 @@ export const Calendar = ({
 
 	const component = 'calendar'
 
+	useEffect(() => {
+			const a = calendarGridDayObjects.map(day => getWorkoutCategory(day))
+			Promise.all(a).then((arr:any) => {
+				setCategory(arr)
+			})
+	}, [yearAndMonth])
+
 	return (
 		<div className={styles["calendar-root"]}>
 			<div className={styles["navigation-header"]}>
 				<div className={styles["month-nav-arrow-buttons"]}>
 					<button
+						data-testid="button-back"
 						onClick={() =>
 							handleMonthNavBackButtonClick(
 								{component,
@@ -78,6 +96,7 @@ export const Calendar = ({
 						prev{' '}
 					</button>
 					<button
+						data-testid="button-forward"
 						onClick={() =>
 							handleMonthNavForwardButtonClick(
 								{component,
@@ -109,7 +128,7 @@ export const Calendar = ({
 					</div>))}
 			</div>
 			<div className={styles["days-grid"]}>
-				{calendarGridDayObjects.map((day) => (
+				{calendarGridDayObjects.map((day, i) => (
 					<div key={day.dateString} className={classNames(styles['day-grid-item-container'],
 						{[styles['weekend-day']]: isWeekendDay(day.dateString),
 						 [styles['current-month']]: day.isCurrentMonth,
@@ -121,6 +140,9 @@ export const Calendar = ({
 							day.isCurrentMonth
 							? (<span className={styles.today}>{renderDay(day)}</span>)
 							: (renderDay(day))}
+							<div className={category?.[i] ? `${category?.[i]}-indicator` : ''}>
+								{category?.[i]}
+							</div>
 						</div>
 					</div>))}
 			</div>

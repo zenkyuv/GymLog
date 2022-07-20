@@ -108,7 +108,6 @@ export const today:number[] = new Date()
 	.split('-')
 	.map((e) => Number(e))
 export const [yearNow, monthNow, dayNow] = today
-export const daysOfCurrentMonths = new Date(yearNow, monthNow, 0).getDate()
 export const isToday = (year: number, month: number, day: number) => {
 	return day === dayNow && month === monthNow && year === yearNow
 }

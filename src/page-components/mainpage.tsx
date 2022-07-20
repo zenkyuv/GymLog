@@ -1,6 +1,6 @@
-import Main from './common/main.js'
-import Footer from './common/footer.js'
-import Header from './common/header.js'
+import Main from './common/main'
+import Footer from './common/footer'
+import Header from './common/header'
 import { observer } from 'mobx-react-lite'
 
 const MainPage = observer(() => {
