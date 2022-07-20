@@ -10,7 +10,7 @@ export interface SignProps {
 }
 
 export interface SetExercisePanel {
-    showExercise: boolean
+    showCategories: boolean
     category: any
     exercise: any
     controlPanel: boolean
@@ -21,7 +21,8 @@ export interface WorkoutOptions {
 	yearAndMonth: number[],
 	onYearAndMonthChange: React.Dispatch<React.SetStateAction<number[]>>,
 	userStore?: UserStore,
-	setExercisesPanel?: React.Dispatch<React.SetStateAction<SetExercisePanel>>
+	setCategoriesPanel?: React.Dispatch<React.SetStateAction<SetExercisePanel>>
+	daysOfCurrentMonths?: any
 }
 
 export interface ControlPanelData {
