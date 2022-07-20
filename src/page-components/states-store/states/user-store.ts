@@ -2,18 +2,17 @@ import { action, makeObservable } from 'mobx'
 import { observable } from 'mobx'
 import { createContext } from 'react'
 import { WorkoutData } from '../../../types/interfaces'
+
 export class UserStore {
+	@observable selectedDate = []
   @observable userLogged = false
   userUID = ''
-	@observable workoutData:WorkoutData = {
-		category: undefined,
-		exercise: undefined,
-		reps: [],
-		weight: [],
-		yearAndMonth: []
-	}
+	@observable workoutData: WorkoutData[];
+	@observable databaseTime: any;
   choosenExercise = []
-  @observable dbDataLoading = true
+	@observable dbDataLoading = false
+	@observable categoriesAndExercises;
+	@observable categoriesDependableOnDay;
 
   constructor() {
     makeObservable(this)
@@ -24,9 +23,14 @@ export class UserStore {
     this.userLogged = false
   }
 
+	@action
+	setSelectedDate(yearAndMonth) {
+		this.selectedDate = yearAndMonth
+	}
+
   @action
-  Logged() {
-    this.userLogged = true
+	Logged() {
+			this.userLogged = true
   }
 
   @action
@@ -35,18 +39,28 @@ export class UserStore {
   }
 
   @action
-  setWorkoutData(data: WorkoutData) {
+  setWorkoutData(data: any) {
     this.workoutData = data
-  }
+	}
+	
+	setDatabaseTime(time: any) {
+		this.databaseTime = time
+	}
 
-	@action clearWorkoutData() {
-		this.workoutData = {
-		category: undefined,
-		exercise: undefined,
-		reps: [],
-		weight: [],
-		yearAndMonth: []
-		}
+	@action clearStore() {
+		this.userLogged = false,
+		this.userUID = '',
+		this.workoutData = undefined;
+  	this.choosenExercise = []
+  	this.dbDataLoading = true
+	}
+
+	@action setUserStaticCategoriesAndExercises(data) {
+		this.categoriesAndExercises = data;
+	}
+
+	@action setCategoriesDependableOnDay(categories: any[]) {
+		this.categoriesDependableOnDay = categories
 	}
 
   @action
