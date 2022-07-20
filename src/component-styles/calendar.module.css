@@ -21,12 +21,15 @@ td {
 }
 
 .day-of-week-header-cell {
-  color: var(--text-color-primary);
-  background-color: var(--grid-foreground-color);
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.day-content-wrapper {
+	display: flex;
+	flex-direction: column;
 }
 
 .days-of-week,
@@ -41,16 +44,14 @@ td {
 }
 
 .days-grid {
-  height: 70%;
+  height: 80%;
   position: relative;
-  border: var(--grid-gap) solid var(--grid-background-color);
-  background-color: var(--grid-background-color);
+	align-items: center;
 }
 
 .day-grid-item-header {
 	display: flex;
 	justify-content: center;
-	padding: 1.5em;
 }
 
 .current-month:hover {
@@ -72,21 +73,34 @@ td {
 	display: flex;
 	font-size: 1em;
 	color: orange;
+	justify-content: center;
 }
 
 .navigation-header {
 	display: flex;
 	justify-content: space-evenly;
 	height: 8%;
+	margin: 1em;
 }
+
+.month-nav-arrow-buttons {
+	display: flex;
+	gap: 1em;
+}
+
+.month-nav-arrow-buttons button {
+	padding: 0.6em 0.9em 0.5em 0.9em;
+	border-radius: 10px;
+}
+
+/* media queries */
 
 @media only screen and (max-width: 1000px) { 
 	.day-grid-item-header {
 		width: 4em;
-		padding: 1em;
 	}
 	.days-of-week {
-		font-size: 0.8em;
+		font-size: 0.9em;
 	}
 	.not-current-month {
 		width: 3.5em;
@@ -94,13 +108,15 @@ td {
 	}
 }
 
+@media only screen and (max-width: 800px) {
+	.days-of-week {
+		font-size: 0.85em;
+	}
+}
+
 @media only screen and (max-width: 600px) {
 	.day-grid-item-header {
 		width: 2.5em;
-		padding: 0.5em;
-	}
-	.days-of-week {
-		font-size: 0.8em;
 	}
 	.days-grid {
 		margin-bottom: 1em;
@@ -112,14 +128,4 @@ td {
 		width: 3em;
 		height: 3em;
 	}
-}
-
-.month-nav-arrow-buttons {
-	display: flex;
-	gap: 1em;
-}
-
-.month-nav-arrow-buttons button {
-	padding: 0.6em 0.9em 0.5em 0.9em;
-	border-radius: 10px;
 }

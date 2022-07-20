@@ -20,12 +20,12 @@
     "noEmit": false,
     "jsx": "react-jsx",
     "rootDir": "src",
-    "outDir": "src-x"
+    "outDir": "src-x/output"
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.js",
     "src/**/*.tsx",
-    "src/test/tests.jsx"
+    "src/test/tests.test.tsx"
   ]
 }
