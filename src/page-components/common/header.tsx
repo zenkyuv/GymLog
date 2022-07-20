@@ -34,7 +34,7 @@ const Header = observer(() => {
 
 						{userStore.userLogged && !pageStore.dashboardVisible
 							? (<li className={styles["scroll-to-section"]}>
-									<a href="#top" className={styles.active}
+									<a data-testid="dashboard-button" href="#top" className={styles.active}
 										onClick={() => pageStore.makeDashboardVisible()}>
 											Dashboard
 									</a>
@@ -43,7 +43,7 @@ const Header = observer(() => {
 						
 						{userStore.userLogged === false
 							? (<li className={styles["main-button"]}>
-									<a href="#/" onClick={() => setClick(true)}>
+									<a href="#/" data-testid="signin-main" onClick={() => setClick(true)}>
 										Sign in
 									</a>
 							</li>)
