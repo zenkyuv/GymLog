@@ -60,17 +60,18 @@ const ControlPanel = (
 	}
 
 	const loadDatabaseData = () => {
-		const dbData = userStore.workoutData
-		const weight = dbData !== undefined ? dbData.weight : null
-		const reps = dbData !== undefined ? dbData.reps : null
+		const dbData: any = userStore.workoutData?.filter(data => data.exercise == exercise)
+			? userStore.workoutData.filter(data => data.exercise == exercise) : undefined
+		const weight = dbData !== [] ? dbData?.map(data => data.weight).flat() : undefined
+		const reps = dbData !== [] ? dbData?.map(data => data.reps).flat() : undefined
 		const index = weight
 		const rows: GridRowsProp = index !== undefined
-				? index.map((_e, i) => ({
-						id: i + 1,
-						weight: weight [i],
-						reps: reps[i],
-					}))
-					: []
+			? index.map((_e, i) => ({
+				id: i + 1,
+				weight: weight[i],
+				reps: reps[i],
+			}))
+			: []
 		return {weight, reps, rows}
 	}
 
