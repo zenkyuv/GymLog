@@ -1,16 +1,7 @@
 import '../../component-styles/main.css'
 import { observer } from 'mobx-react-lite'
-import { checkIfUserLogged } from '../auth'
-import { useContext, useEffect } from 'react'
-import UserStore from '../states-store/states/user-store'
 
 const Main = observer(() => {
-
-	const userStore = useContext(UserStore)
-
-	useEffect(() => {
-		checkIfUserLogged(userStore)
-	})
 
 	return (
 		<div>

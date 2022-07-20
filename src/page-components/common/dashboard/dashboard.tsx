@@ -1,19 +1,19 @@
 import { useContext } from 'react'
-import { logout } from '../../auth.js'
+import { logout } from '../../auth'
 import { observer } from 'mobx-react-lite'
-import { today } from './calendar/helpers.js'
+import { today } from './calendar/helpers'
 import twoDots from "../../../images/two-dots.svg"
-import {getData} from '../../firestore-database.js'
+import {getData} from '../../firestore-database'
 import homeIcon from '../../../images/home-icon.svg'
 import logoutIcon from '../../../images/logout-icon.svg'
-import WorkoutPanel from './workout-panel/add-workout.js'
+import WorkoutPanel from './workout-panel/add-workout'
 import historyIcon from '../../../images/history-icon.svg'
 import calendarIcon from '../../../images/calendar-icon.svg'
 import {useEffect, useReducer, useRef, useState} from 'react'
-import UserStore from '../../states-store/states/user-store.js'
-import PageStore from '../../states-store/states/page-store.js'
+import UserStore from '../../states-store/states/user-store'
+import PageStore from '../../states-store/states/page-store'
 import statisticsIcon from '../../../images/statistics-icon.svg'
-import {CalendarDayHeader, Calendar} from './calendar/calendar.js'
+import {CalendarDayHeader, Calendar} from './calendar/calendar'
 import styles from '../../../component-styles/dashboard.module.css'
 
 const Dashboard = observer(() => {
@@ -45,6 +45,7 @@ const Dashboard = observer(() => {
 	const [showComponent, setComponent] = useReducer(reducer, component)
 
 	useEffect(() => {
+		userStore.setSelectedDate(yearAndMonth)
 		setComponent(savedComponent.current)
 	}, [yearAndMonth])
 
