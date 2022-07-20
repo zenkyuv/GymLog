@@ -8,6 +8,7 @@ import {
 	updateDoc,
 	collection,
 	getFirestore,
+	addDoc,
 } from 'firebase/firestore'
 import { UserStore } from './states-store/states/user-store'
 
@@ -16,20 +17,23 @@ const setDocument = async (
 	exercise: string,
 	category: string,
 	yearAndMonth: number[],
-	reps: number[] | number,
-	weight: number[] | number,
+	reps: number,
+	weight: number,
 	action: string,
 	indexToRemove: GridRowId[]
 ) => {
 
 	const db = getFirestore()
 	const [year, month, day] = yearAndMonth
-	const userReps = userStore.workoutData.reps
-	const userWeight = userStore.workoutData.weight
-	const timeData = yearAndMonth.toString().split(',').join('-')
 	getData(userStore, yearAndMonth)
-	const repsCopy = userReps ? [...userStore.workoutData.reps] : [reps]
-	const weightCopy = userWeight ? [...userStore.workoutData.weight] : [weight]
+	const workoutData = userStore.workoutData
+	const copyWorkoutData = userStore.workoutData ? [...workoutData] : []
+	const filterWorkoutData = userStore.workoutData?.filter(data => data.exercise == exercise)
+	const userReps = filterWorkoutData ? filterWorkoutData.map(data => data.reps) : []
+	const userWeight = filterWorkoutData ? filterWorkoutData.map(data => data.weight) : []
+	const timeData = yearAndMonth.toString().split(',').join('-')
+	const repsCopy = [...userReps].flat()
+	const weightCopy = [...userWeight].flat()
 
 	if (action === 'add') {
 		if (userReps && userWeight) {
@@ -44,62 +48,44 @@ const setDocument = async (
 		weightCopy.splice(Number(...indexToRemove) - 1, 1)
 	}
 
-	await setDoc(
-		doc(db, 'users', userStore.userUID, timeData, 'exercises'),
-		{
+	const workout = {
+		yearAndMonth: yearAndMonth, exercises: {
 			[exercise]: {
-				category: category,
-				exercise: exercise,
-				yearAndMonth: yearAndMonth,
-				reps: repsCopy,
-				weight: weightCopy,
-				// sets: arrayUnion(`set-${timeInMs}-${reps}-${weight}`)
-			},
-		},
-		{ merge: true }
-	)
+				exerciseName: exercise, reps: repsCopy, weight: weightCopy
+			}
+		}
+	}
 
+	await setDoc(
+		doc(db, 'users', userStore.userUID, timeData,category), {
+			workout
+		},
+		{merge: true}
+	)
 }
 
 const getData = async (userStore: UserStore, yearAndMonth: number[]) => {
 	console.log("loaded")
-	userStore.isDbDataLoading(true)
+	// userStore.isDbDataLoading(true)
 	const [year, month, day] = yearAndMonth
 	const timeData = yearAndMonth.toString().split(',').join('-')
 	const db = getFirestore()
-	const docRef = doc(db, 'users', userStore.userUID, timeData, 'exercises')
-	const docSnap = await getDoc(docRef)
-
-	if (docSnap.exists()) {
-		userStore.isDbDataLoading(false)
-		for (let key in docSnap.data()) {
-			const data = {
-				category: docSnap.data()[key].category,
-				exercise: docSnap.data()[key].exercise,
-				// sets: docSnap.data()[key].sets,
-				yearAndMonth: docSnap.data()[key].yearAndMonth,
-				reps: docSnap.data()[key].reps,
-				weight: docSnap.data()[key].weight,
+	const querySnapshot = await getDocs(collection(db, 'users', userStore.userUID, timeData));
+	const d = querySnapshot.forEach((doc) => {
+		// doc.data() is never undefined for query doc snapshots
+		// console.log(doc.id, " => ", doc.data().workout.exercises)
+		const categories = []
+		const exercises = []
+		categories.push(doc.id)
+		if (Object.keys(doc.data()).length !== 0) {
+			for (let [key,value] of Object.entries<any>(doc.data().workout.exercises)) {
+			exercises.push({exercise: value.exerciseName, reps: value.reps.flat(), weight: value.weight.flat()})
 			}
-			userStore.setWorkoutData(data)
-			return data
-		}
-	} else {
-		userStore.isDbDataLoading(false)
-		console.log("niema")
-			const data = {
-				category: undefined,
-				exercise: undefined,
-				// sets: docSnap.data()[key].sets,
-				yearAndMonth: undefined,
-				reps: undefined,
-				weight: undefined,
-		}
-		userStore.setWorkoutData(data)
-		return data
-		// doc.data() will be undefined in this case
-		// console.log('No such document!')
-	}
+			userStore.setWorkoutData(exercises)
+			userStore.setDatabaseTime(doc.data().workout.yearAndMonth)
+			userStore.setCategoriesDependableOnDay(categories)
+		return doc.data
+		}})
 }
 
 const renderCategoriesAndExercises = async (userStore: UserStore) => {
@@ -109,12 +95,6 @@ const renderCategoriesAndExercises = async (userStore: UserStore) => {
 	if (docSnap.exists()) {
 		for (let key in docSnap.data()) {
 			return docSnap.data()[key]
-		// 	const data = {
-		// 		category: docSnap.data()[key].category,
-		// 		exercise: docSnap.data()[key].exercise,
-		// 	}
-		// 	// userStore.setWorkoutData(data)
-		// 	return data
 		}
 	}
 }
