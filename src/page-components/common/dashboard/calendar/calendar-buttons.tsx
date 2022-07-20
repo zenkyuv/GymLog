@@ -1,9 +1,9 @@
-import {daysOfCurrentMonths, isToday} from './helpers.js'
-import {WorkoutOptions} from '../../../../types/interfaces.js'
+import {isToday} from './helpers'
+import {WorkoutOptions} from '../../../../types/interfaces'
 import styles from "../../../../component-styles/workout-panel.module.css"
 
 export const handleMonthNavBackButtonClick = (
-	{setExercisesPanel,
+	{setCategoriesPanel,
 	component,
 	yearAndMonth,
 	onYearAndMonthChange,
@@ -12,22 +12,23 @@ export const handleMonthNavBackButtonClick = (
 
 	const [year, month, day] = yearAndMonth
 	let prevDay = day - 1
-	userStore.clearWorkoutData()
 	let nextYear = year
 	let nextMonth = month
-
+	let daysOfCurrentMonths = new Date(year, month, 0).getDate()
 	if (component === 'workoutPanel') {
-		setExercisesPanel({
-			showExercise: false,
+		setCategoriesPanel({
+			showCategories: false,
 			category: undefined,
 			exercise: undefined,
 			controlPanel: false,
 		})
 		if (prevDay < 1) {
 			nextMonth -= 1
+			daysOfCurrentMonths = new Date(year, nextMonth, 0).getDate()
 			prevDay = daysOfCurrentMonths
 		}
 	} else if (component === 'calendar') {
+		prevDay = day
 		nextMonth -= 1
 	}
 
@@ -41,7 +42,7 @@ export const handleMonthNavBackButtonClick = (
 }
 
 export const handleMonthNavForwardButtonClick = (
-	{setExercisesPanel,
+	{setCategoriesPanel,
 	component,
 	yearAndMonth,
 	onYearAndMonthChange,
@@ -52,11 +53,10 @@ export const handleMonthNavForwardButtonClick = (
 	let nextYear = year
 	let nextMonth = month
 	let nextDay = day + 1
-	userStore.clearWorkoutData()
-
+	let daysOfCurrentMonths = new Date(year, month, 0).getDate()
 	if (component === 'workoutPanel') {
-		setExercisesPanel({
-			showExercise: false,
+		setCategoriesPanel({
+			showCategories: false,
 			category: undefined,
 			exercise: undefined,
 			controlPanel: false,
@@ -66,6 +66,7 @@ export const handleMonthNavForwardButtonClick = (
 			nextMonth += 1
 		}
 	} else if (component === 'calendar') {
+		nextDay = day
 		nextMonth += 1
 	}
 
@@ -79,11 +80,12 @@ export const handleMonthNavForwardButtonClick = (
 }
 
 export const renderButtons = (
-	{setExercisesPanel,
+	{setCategoriesPanel,
 	component,
 	yearAndMonth,
 	onYearAndMonthChange,
-	userStore}: Required<WorkoutOptions>
+	userStore,
+	daysOfCurrentMonths}: Required<WorkoutOptions>
 ) => {
 
 	const [year, month, day] = yearAndMonth
@@ -91,29 +93,33 @@ export const renderButtons = (
 	return (
 		<div className={styles["time-cnt"]}>
 			<button
-				className={styles["button-margin"]}
+				data-testid="button-back"
+				className={`${styles["button-margin"]}`}
 				onClick={() =>
 					handleMonthNavBackButtonClick(
-						{setExercisesPanel,
+						{setCategoriesPanel,
 						component,
 						yearAndMonth,
 						onYearAndMonthChange,
-						userStore}
+						userStore,
+						daysOfCurrentMonths}
 					)}>
 				{'<'}
 			</button>
-			 <h1 className={styles.time}>
+			 <h1 data-testid="time" className={styles.time}>
 				{isToday(year, month, day) ? 'Today' : `${year}-${month}-${day}`}
 			</h1>
 			<button
+				data-testid="button-forward"
 				className={styles["button-margin"]}
 				onClick={() =>
 					handleMonthNavForwardButtonClick(
-						{setExercisesPanel,
+						{setCategoriesPanel,
 						component,
 						yearAndMonth,
 						onYearAndMonthChange,
-						userStore}
+						userStore,
+						daysOfCurrentMonths}
 					)}>
 				{'>'}
 			</button>
