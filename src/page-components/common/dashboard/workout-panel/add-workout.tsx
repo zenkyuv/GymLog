@@ -2,19 +2,19 @@ import {
 	DataGrid,
 	GridColDef,
 	GridRowId,
-	GridRowsProp,
 } from '@mui/x-data-grid'
 import { observer } from 'mobx-react'
-import ControlPanel from './ex-control-panel.js'
-import ShouldersImg from "../../../../images/ohp.jpg"
-import shoulderExercises from './shoulderExercises.js'
+import ohp from "../../../../images/ohp.jpg"
+import ControlPanel from './ex-control-panel'
+import renderExercises from './renderExercises'
 import { useContext, useEffect, useState } from 'react'
 import { WorkoutOptions } from '../../../../types/interfaces'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
-import { renderButtons } from '../calendar/calendar-buttons.js'
-import UserStore from '../../../states-store/states/user-store.js'
+import { renderButtons } from '../calendar/calendar-buttons'
+import UserStore from '../../../states-store/states/user-store'
 import loadingIndicator from '../../../../images/loading-indicator-2.svg'
 import styles from '../../../../component-styles/workout-panel.module.css'
+import { renderCategoriesAndExercises } from '../../../firestore-database'
 
 const WorkoutPanel = observer((
 	{component,
@@ -23,74 +23,70 @@ const WorkoutPanel = observer((
 
 	const userStore = useContext(UserStore)
 	const [year, month, day] = yearAndMonth
-	const [showExercises, setExercisesPanel] = useState({
-		showExercise: false,
+	const [categoriesPanel, setCategoriesPanel] = useState({
+		showCategories: false,
 		category: undefined,
 		exercise: undefined,
 		controlPanel: false,
 	})
-
+	const [categories, setCategories]:any = useState()
+	const daysOfCurrentMonths = new Date(year, month, 0).getDate()
 	const [selectionModel, setSelectionModel] = useState<GridRowId[]>([])
 	type AddButton = 'add-button-top' | 'add-button'
-	const categories = ["Shoulders",'Triceps','Biceps','Chest','Back','Legs','Abs',]
-	const [category, setCategory] = useState<undefined | string>(undefined)
-	const Shoulders = {
-		name: "Shoulders",
-		image: ShouldersImg
-	}
+	const [workout, setWorkout] = useState<undefined | any>({
+		category: undefined,
+		exercises: undefined
+	})
 
-	const exercises = () => {
+	useEffect( () => {
+	renderCategoriesAndExercises(userStore).then(e => setCategories(e))
+	}, [])
+
+	const renderCategories = () => {
 		return (
 			<div className={styles.categories}>
-				{category === undefined
-					? categories.map((category: string, i) => (
-							<div key={i} onClick={() => setCategory(category)} className={styles.category}>
-								{category}
+				{workout?.category === undefined
+					? categories.map(({category, exercises}: any, i) => (
+						<div key={i} onClick={() => setWorkout(
+							{ exercises: exercises, category: category })} className={styles.category}>
+							<h1 className={styles["category-name"]}>{category}</h1>
+							<img className={styles["category-image"]} src={ohp} alt="ohp" />
 							</div>))
-					: category === 'Shoulders'
-					? shoulderExercises(category,userStore,yearAndMonth,setExercisesPanel)
-					: null}
+					: renderExercises(workout.category,workout.exercises,userStore,yearAndMonth,setCategoriesPanel)}
 			</div>
 		)
 	}
 
 	const changeTimeBtns = renderButtons(
-		{setExercisesPanel,
+		{setCategoriesPanel,
 		component,
 		yearAndMonth,
 		onYearAndMonthChange,
-		userStore}
+		userStore,
+		daysOfCurrentMonths}
 	)
 
 	const addExerciseBtn = (css: AddButton) => {
 		return (
 			<div className={styles[css]} onClick={() => {
-					setExercisesPanel(prev => ({ ...prev, showExercise: true }))
-					setCategory(undefined)}}>
+					setCategoriesPanel(prev => ({ ...prev, showCategories: true }))
+					setWorkout({category: undefined, exercises: undefined})}}>
 				+
 			</div>
 		)
 	}
 
 	const data = userStore.workoutData
-	const [databaseYear, databaseMonth, databaseDay] = data.yearAndMonth
-		? data.yearAndMonth
+	const [databaseYear, databaseMonth, databaseDay] = userStore.databaseTime
+		? userStore.databaseTime
 		: [0, 0, 0]
-	const databaseTimeEqualsFrontend =
-	databaseYear === year && databaseMonth === month && databaseDay === day
-
-	const weight = data.weight ? data.weight : undefined
-	const reps = data.reps ? data.reps : undefined
+	const databaseTimeEqualsFrontend = databaseYear === year && databaseMonth === month && databaseDay === day
+	const weight = data?.map(data => data.weight) ? data?.map(data => data.weight) : undefined
+	const reps = data?.map(data => data.reps) ? data?.map(data => data.reps) : undefined
 	const index = weight
-
-	const rows: GridRowsProp = index !== undefined
-			? index.map((_e, i) => ({
-					id: i + 1,
-					weight: weight[i],
-					reps: reps[i]
-				}))
+	const rows = index !== undefined
+			? data
 	: []
-
 	const columns: GridColDef[] = [
 		{ field: 'id', headerName: 'Set', width: 180 },
 		{ field: 'weight', headerName: 'Weight', width: 180 },
@@ -100,36 +96,41 @@ const WorkoutPanel = observer((
 	return (
 		<div className={styles["workout-cnt"]}>
 
-			{databaseTimeEqualsFrontend && !showExercises.controlPanel
-				? (<div className={styles["flex-row time-center"]}>
+			{databaseTimeEqualsFrontend && !categoriesPanel.controlPanel
+				? (<div className={styles["time-cnt-container"]}>
 					{changeTimeBtns}
 					{addExerciseBtn('add-button-top')}
 					</div>)
-				: (<div className={styles["flex-row time-center"]}>{changeTimeBtns}</div>)}
+				: changeTimeBtns}
 
-			{userStore.dbDataLoading && !showExercises.controlPanel
+			{userStore.dbDataLoading && !categoriesPanel.controlPanel
 				? (<div className={styles.center}>
 					<img alt="loading" className={styles["loading-indicator"]} src={loadingIndicator}/>
 					</div>)
-				: showExercises.showExercise
-					? (exercises())
-					: databaseTimeEqualsFrontend && !showExercises.controlPanel
-						? (<div className={styles.exercise}>
-								<h3>{data.exercise}</h3>
+				: categoriesPanel.showCategories
+					? (renderCategories())
+					: databaseTimeEqualsFrontend && !categoriesPanel.controlPanel
+						? (<div className={styles["exercise-cnt"]}>
+							{/* <h3>{data}</h3> */}
+							{rows.map(({weight, reps}) => (
 								<ClickAwayListener onClickAway={() => setSelectionModel([])}
 									style={{ height: '100%', width: '100%' }}>
 								<DataGrid selectionModel={selectionModel}
 									onSelectionModelChange={(selectionModel) => setSelectionModel(selectionModel)}
-									rows={rows}
-									pageSize={5}
+										rows={weight.map((_e, i) => ({
+											reps: reps[i],
+											weight: weight[i],
+											id: i + 1,	
+										}))}
+										pageSize={5}
 									columns={columns}/>
-								</ClickAwayListener>
+								</ClickAwayListener>))}
 							</div>)
-						: !showExercises.controlPanel
+						: !categoriesPanel.controlPanel
 							? (<div className={styles.center}>{addExerciseBtn('add-button')}</div>)
 							: (<ControlPanel databaseTimeEqualsFrontend={databaseTimeEqualsFrontend}
-									exercise={showExercises.exercise}
-									category={showExercises.category}
+									exercise={categoriesPanel.exercise}
+									category={categoriesPanel.category}
 									yearAndMonth={yearAndMonth}
 									userStore={userStore} />)}
 
@@ -139,5 +140,3 @@ const WorkoutPanel = observer((
 )
 
 export default WorkoutPanel
-
-// ControlPanel(showExercises.exercise, showExercises.category, yearAndMonth, userStore)
