@@ -183,8 +183,11 @@ h3 {
   text-align: center;
 }
 .exercise-cnt {
+	display: flex;
+	flex-direction:column;
   margin: 0 2em 0 2em;
   height: 373px;
+	gap: 1em;
 }
 .row {
 	display: flex;
@@ -200,3 +203,11 @@ h3 {
   margin: 0.5em;
   border-bottom: 1px solid #888888;
 }
+
+.grid-height {
+	min-height: 100%;
+}
+
+/* .MuiDataGrid-root {
+	min-height: 100%;
+} */
