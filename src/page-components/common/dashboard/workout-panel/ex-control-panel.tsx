@@ -9,7 +9,7 @@ import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import { ClickAwayListener } from '@mui/material'
 import { ControlPanelData } from '../../../../types/interfaces'
-import { getData, setDocument } from '../../../firestore-database'
+import { getData, removeDocument, setDocument } from '../../../firestore-database'
 import styles from '../../../../component-styles/control-panel.module.css'
 
 const ControlPanel = (
@@ -43,7 +43,7 @@ const ControlPanel = (
 		const reps = Number(values.reps)
 		const weight = Number(values.weight)
 		if (weight >= 0 && reps >= 0) {
-			setDocument(userStore, exercise, category, yearAndMonth, reps, weight, 'add', selectionModel)
+			setDocument(userStore, exercise, category, yearAndMonth, reps, weight)
 		} else {
 			setShowEl(true)
 			setTimeout(() => {
@@ -60,8 +60,7 @@ const ControlPanel = (
 	}
 
 	const loadDatabaseData = () => {
-		const dbData: any = userStore.workoutData?.filter(data => data.exercise == exercise)
-			? userStore.workoutData.filter(data => data.exercise == exercise) : undefined
+		const dbData = userStore.workoutData?.filter(data => data.exercise == exercise)
 		const weight = dbData !== [] ? dbData?.map(data => data.weight).flat() : undefined
 		const reps = dbData !== [] ? dbData?.map(data => data.reps).flat() : undefined
 		const index = weight
@@ -95,7 +94,7 @@ const ControlPanel = (
 				<TextField type="number" value={values.reps} onChange={handleChange('reps')}
 					id={styles["outlined-start-adornment"]} placeholder="reps"/>
 				<div className={styles["flex-gap"]}>
-					<Button type="submit" onClick={() => getData(userStore, yearAndMonth)}
+					<Button type="submit"
 						variant="contained" color="success">
 						{isSelected
 							? <span>Update</span>
@@ -104,8 +103,7 @@ const ControlPanel = (
 					<Button type="reset" color={isSelected ? 'error' : 'primary'}
 						onClick={() => getData(userStore, yearAndMonth)} variant="contained">
 						{isSelected
-							? (<span onClick={() => setDocument(userStore, exercise, category, yearAndMonth,
-									databaseData.reps, databaseData.weight, 'remove', selectionModel)}>
+							? (<span onClick={() => removeDocument(selectionModel, userStore, exercise, yearAndMonth, category)}>
 								Delete </span>)
 							: (<span>Clear</span>)}
 					</Button>
