@@ -81,12 +81,13 @@ const WorkoutPanel = observer((
 		? userStore.databaseTime
 		: [0, 0, 0]
 	const databaseTimeEqualsFrontend = databaseYear === year && databaseMonth === month && databaseDay === day
-	const weight = data?.map(data => data.weight) ? data?.map(data => data.weight) : undefined
-	const reps = data?.map(data => data.reps) ? data?.map(data => data.reps) : undefined
+	const weight = data?.map(data => data.weight) ? data?.map(data => data.weight).flat() : undefined
+	const reps = data?.map(data => data.reps) ? data?.map(data => data.reps).flat() : undefined
 	const index = weight
 	const rows = index !== undefined
 			? data
-	: []
+		: []
+
 	const columns: GridColDef[] = [
 		{ field: 'id', headerName: 'Set', width: 180 },
 		{ field: 'weight', headerName: 'Weight', width: 180 },
@@ -111,20 +112,23 @@ const WorkoutPanel = observer((
 					? (renderCategories())
 					: databaseTimeEqualsFrontend && !categoriesPanel.controlPanel
 						? (<div className={styles["exercise-cnt"]}>
-							{/* <h3>{data}</h3> */}
-							{rows.map(({weight, reps}) => (
-								<ClickAwayListener onClickAway={() => setSelectionModel([])}
+							{rows.map(({ weight, reps, exercise }) => (
+								<>
+									<h3>{exercise}</h3>
+									<ClickAwayListener onClickAway={() => setSelectionModel([])}
 									style={{ height: '100%', width: '100%' }}>
-								<DataGrid selectionModel={selectionModel}
-									onSelectionModelChange={(selectionModel) => setSelectionModel(selectionModel)}
+									<DataGrid className={styles["grid-height"]} selectionModel={selectionModel}
+										onSelectionModelChange={(selectionModel) => setSelectionModel(selectionModel)}
 										rows={weight.map((_e, i) => ({
 											reps: reps[i],
 											weight: weight[i],
-											id: i + 1,	
+											id: i + 1,
 										}))}
 										pageSize={5}
-									columns={columns}/>
-								</ClickAwayListener>))}
+										columns={columns} />
+									</ClickAwayListener>
+								</>
+							))}
 							</div>)
 						: !categoriesPanel.controlPanel
 							? (<div className={styles.center}>{addExerciseBtn('add-button')}</div>)
