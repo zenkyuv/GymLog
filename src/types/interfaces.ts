@@ -40,3 +40,5 @@ export interface WorkoutData {
 	weight: number[]
 	yearAndMonth: number[]
 }
+
+export interface WorkoutDataObjects extends WorkoutData {}

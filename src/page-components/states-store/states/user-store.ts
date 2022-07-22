@@ -1,13 +1,13 @@
 import { action, makeObservable } from 'mobx'
 import { observable } from 'mobx'
 import { createContext } from 'react'
-import { WorkoutData } from '../../../types/interfaces'
+import { WorkoutDataObjects } from '../../../types/interfaces'
 
 export class UserStore {
 	@observable selectedDate = []
   @observable userLogged = false
   userUID = ''
-	@observable workoutData: WorkoutData[];
+	@observable workoutData: WorkoutDataObjects[];
 	@observable databaseTime: any;
   choosenExercise = []
 	@observable dbDataLoading = false
@@ -39,10 +39,11 @@ export class UserStore {
   }
 
   @action
-  setWorkoutData(data: any) {
-    this.workoutData = data
+	setWorkoutData(data: any) {
+		this.workoutData = data
 	}
 	
+	@action
 	setDatabaseTime(time: any) {
 		this.databaseTime = time
 	}
