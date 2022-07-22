@@ -30,6 +30,8 @@ td {
 .day-content-wrapper {
 	display: flex;
 	flex-direction: column;
+	position: relative;
+	align-items: center;
 }
 
 .days-of-week,
@@ -91,6 +93,54 @@ td {
 .month-nav-arrow-buttons button {
 	padding: 0.6em 0.9em 0.5em 0.9em;
 	border-radius: 10px;
+}
+
+.indicators-wrapper {
+	position: absolute;
+	display: flex;
+	gap: 5px;
+	bottom: -5px;
+}
+
+.Chest-indicator {
+	width: 5px;
+	height: 5px;
+	background-color: red;
+	border-radius: 5px;
+}
+.Shoulders-indicator {
+	width: 5px;
+	height: 5px;
+	background-color: purple;
+	border-radius: 5px;
+}
+
+.Legs-indicator {
+	width: 5px;
+	height: 5px;
+	background-color: lightskyblue;
+	border-radius: 5px;
+}
+
+.Back-indicator {
+	width: 5px;
+	height: 5px;
+	background-color: blue;
+	border-radius: 5px;
+}
+
+.Biceps-indicator {
+	width: 5px;
+	height: 5px;
+	background-color: orange;
+	border-radius: 5px;
+}
+
+.Triceps-indicator {
+	width: 5px;
+	height: 5px;
+	background-color: green;
+	border-radius: 5px;
 }
 
 /* media queries */
