@@ -19,8 +19,6 @@ const setDocument = async (
 	yearAndMonth: number[],
 	reps: number,
 	weight: number,
-	action: string,
-	indexToRemove: GridRowId[]
 ) => {
 
 	const db = getFirestore()
@@ -35,18 +33,10 @@ const setDocument = async (
 	const repsCopy = [...userReps].flat()
 	const weightCopy = [...userWeight].flat()
 
-	if (action === 'add') {
 		if (userReps && userWeight) {
 			repsCopy.push(reps)
 			weightCopy.push(weight)
 		}
-	}
-
-	if (action === 'remove') {
-		console.log('remove')
-		repsCopy.splice(Number(...indexToRemove) - 1, 1)
-		weightCopy.splice(Number(...indexToRemove) - 1, 1)
-	}
 
 	const workout = {
 		yearAndMonth: yearAndMonth, exercises: {
@@ -64,28 +54,72 @@ const setDocument = async (
 	)
 }
 
+const removeDocument = async (
+	indexToRemove: GridRowId[],
+	userStore: UserStore,
+	exercise: string,
+	yearAndMonth: number[],
+	category: string
+) => {
+
+	const db = getFirestore()
+	const filterWorkoutData = userStore.workoutData?.filter(data => data.exercise == exercise)
+	const userReps = filterWorkoutData ? filterWorkoutData.map(data => data.reps) : []
+	const userWeight = filterWorkoutData ? filterWorkoutData.map(data => data.weight) : []
+	const repsCopy = [...userReps].flat()
+	const weightCopy = [...userWeight].flat()
+	const timeData = yearAndMonth.toString().split(',').join('-')
+
+	repsCopy.splice(Number(...indexToRemove) - 1, 1)
+	weightCopy.splice(Number(...indexToRemove) - 1, 1)
+	
+	const workout = {
+		yearAndMonth: yearAndMonth, exercises: {
+			[exercise]: {
+				exerciseName: exercise, reps: repsCopy, weight: weightCopy
+			}
+		}
+	}
+
+	await setDoc(
+		doc(db, 'users', userStore.userUID, timeData,category), {
+			workout
+		},
+		{merge: true}
+	)
+}
+
 const getData = async (userStore: UserStore, yearAndMonth: number[]) => {
-	console.log("loaded")
 	// userStore.isDbDataLoading(true)
-	const [year, month, day] = yearAndMonth
 	const timeData = yearAndMonth.toString().split(',').join('-')
 	const db = getFirestore()
 	const querySnapshot = await getDocs(collection(db, 'users', userStore.userUID, timeData));
+	const exercises = []
+	const categories = []
 	const d = querySnapshot.forEach((doc) => {
 		// doc.data() is never undefined for query doc snapshots
 		// console.log(doc.id, " => ", doc.data().workout.exercises)
-		const categories = []
-		const exercises = []
 		categories.push(doc.id)
 		if (Object.keys(doc.data()).length !== 0) {
-			for (let [key,value] of Object.entries<any>(doc.data().workout.exercises)) {
-			exercises.push({exercise: value.exerciseName, reps: value.reps.flat(), weight: value.weight.flat()})
+			for (let [key, value] of Object.entries<any>(doc.data().workout.exercises)) {
+				exercises.push({exercise: value.exerciseName, reps: value.reps.flat(), weight: value.weight.flat()})
 			}
-			userStore.setWorkoutData(exercises)
-			userStore.setDatabaseTime(doc.data().workout.yearAndMonth)
-			userStore.setCategoriesDependableOnDay(categories)
+		userStore.setDatabaseTime(doc.data().workout.yearAndMonth)
 		return doc.data
-		}})
+		}
+	})
+		userStore.setWorkoutData(exercises)
+}
+
+const getCategories = async (userStore: UserStore, yearAndMonth: number[]) => { 
+	const timeData = yearAndMonth.toString().split(',').join('-')
+	const db = getFirestore()
+	const querySnapshot = await getDocs(collection(db, 'users', userStore.userUID, timeData));
+	const categories = []
+	querySnapshot.forEach((doc) => {
+		categories.push(doc.id)
+	})
+	return categories
 }
 
 const renderCategoriesAndExercises = async (userStore: UserStore) => {
@@ -99,4 +133,4 @@ const renderCategoriesAndExercises = async (userStore: UserStore) => {
 	}
 }
 
-export { setDocument, getData, renderCategoriesAndExercises}
+export { setDocument, removeDocument, getData, renderCategoriesAndExercises, getCategories}
