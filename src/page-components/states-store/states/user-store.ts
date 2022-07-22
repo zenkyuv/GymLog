@@ -12,7 +12,6 @@ export class UserStore {
   choosenExercise = []
 	@observable dbDataLoading = false
 	@observable categoriesAndExercises;
-	@observable categoriesDependableOnDay;
 
   constructor() {
     makeObservable(this)
@@ -58,10 +57,6 @@ export class UserStore {
 
 	@action setUserStaticCategoriesAndExercises(data) {
 		this.categoriesAndExercises = data;
-	}
-
-	@action setCategoriesDependableOnDay(categories: any[]) {
-		this.categoriesDependableOnDay = categories
 	}
 
   @action
