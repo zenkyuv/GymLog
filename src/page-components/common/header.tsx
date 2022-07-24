@@ -14,12 +14,12 @@ const Header = observer(() => {
 	const [clicked, setClick] = useState(false)
 
 	useEffect(() => {
-		if (userStore.userLogged) {
+		if (userStore.userIsLogged) {
 			setClick(false)
-		} else if (userStore.userLogged && pageStore.dashboardVisible === false) {
+		} else if (userStore.userIsLogged && pageStore.dashboardVisible === false) {
 			setClick(true)
 		}
-	}, [pageStore.dashboardVisible, userStore.userLogged])
+	}, [pageStore.dashboardVisible, userStore.userIsLogged])
 
 	return (
 		<header className={classNames(styles['header-area header-sticky'])}>
@@ -32,7 +32,7 @@ const Header = observer(() => {
 				<div className={styles["sign-buttons"]}>
 					<ul className={styles.nav}>
 
-						{userStore.userLogged && !pageStore.dashboardVisible
+						{userStore.userIsLogged && !pageStore.dashboardVisible
 							? (<li className={styles["scroll-to-section"]}>
 									<a data-testid="dashboard-button" href="#top" className={styles.active}
 										onClick={() => pageStore.makeDashboardVisible()}>
@@ -41,7 +41,7 @@ const Header = observer(() => {
 								</li>)
 							: null}
 						
-						{userStore.userLogged === false
+						{userStore.userIsLogged === false
 							? (<li className={styles["main-button"]}>
 									<a href="#/" data-testid="signin-main" onClick={() => setClick(true)}>
 										Sign in
@@ -57,7 +57,7 @@ const Header = observer(() => {
 					<span className={styles.bars}>---</span>
 				</div>
 			</nav>
-			{clicked && userStore.userLogged === false ? <SignIn setClick={setClick} /> : null}
+			{clicked && userStore.userIsLogged === false ? <SignIn setClick={setClick} /> : null}
 		</header>
 	)
 })

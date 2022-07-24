@@ -24,7 +24,7 @@ describe("user logged-in", () => {
 		const userStore = useContext(UserStore)
 		userStore.clearStore()
 		userStore.setUserUID(testUserUID)
-		userStore.Logged()
+		userStore.loginUser()
 		return <App />
 	}
 

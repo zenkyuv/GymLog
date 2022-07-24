@@ -31,7 +31,7 @@ const createUser = ({ userData, userStore }: SignUserInfo) => {
 		(cred: any) => {
 			const user = cred.user
 			if (user) {
-				userStore.Logged()
+				userStore.loginUser()
 				userStore.setUserUID(user.uid)
 			}
 			return setDoc(doc(db, 'users', cred.user.uid), {
@@ -54,7 +54,7 @@ const signUser = ({userData, userStore}: SignUserInfo) => {
 			const user = userCredential.user
 			if (user) {
 				console.log('zalogowany')
-				userStore.Logged()
+				userStore.loginUser()
 				console.log(user.uid)
 				userStore.setUserUID(user.uid)
 			}
@@ -73,7 +73,7 @@ const logout = (userStore: UserStore, pageStore: PageStore) => {
 	signOut(auth)
 		.then(() => {
 			pageStore.makeDashboardNotVisible()
-			userStore.NotLogged()
+			userStore.logoutUser()
 		})
 		.catch((error) => {
 			console.log(error)
@@ -84,7 +84,7 @@ const checkIfUserLogged = (userStore: UserStore) => {
 	onAuthStateChanged(auth, (user) => {
 		if (user) {
 			console.log("zalogowany")
-			userStore.Logged()
+			userStore.loginUser()
 			userStore.setUserUID(user.uid)
 			const uid = user.uid
 		} else {

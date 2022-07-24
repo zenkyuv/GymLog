@@ -5,7 +5,7 @@ import { WorkoutDataObjects } from '../../../types/interfaces'
 
 export class UserStore {
 	@observable selectedDate = []
-  @observable userLogged = false
+  @observable userIsLogged = false
   userUID = ''
 	@observable workoutData: WorkoutDataObjects[];
 	@observable databaseTime: any;
@@ -18,8 +18,8 @@ export class UserStore {
   }
 
   @action
-  NotLogged() {
-    this.userLogged = false
+  logoutUser() {
+    this.userIsLogged = false
   }
 
 	@action
@@ -28,8 +28,8 @@ export class UserStore {
 	}
 
   @action
-	Logged() {
-			this.userLogged = true
+	loginUser() {
+		this.userIsLogged = true
   }
 
   @action
@@ -48,7 +48,7 @@ export class UserStore {
 	}
 
 	@action clearStore() {
-		this.userLogged = false,
+		this.userIsLogged = false,
 		this.userUID = '',
 		this.workoutData = undefined;
   	this.choosenExercise = []
