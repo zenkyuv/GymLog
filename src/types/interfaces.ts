@@ -30,7 +30,7 @@ export interface ControlPanelData {
 	exercise: string,
 	category: string,
 	yearAndMonth: number[],
-	databaseTimeEqualsFrontend?: boolean
+	dataExists?: boolean
 }
 
 export interface WorkoutData {
