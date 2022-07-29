@@ -87,6 +87,23 @@ h1 {
   justify-items: center;
 }
 
+.text-container {
+	display: flex;
+	gap: 1em;
+}
+
+h4 {
+	text-align: center;
+	color: gray;
+	transition:color 0.5s linear;
+	cursor: pointer;
+}
+
+h4:hover {
+	color: rgb(177, 177, 177);
+	transition:color 0.5s linear;
+}
+
 @keyframes example {
   0% {
     top: -28px;
