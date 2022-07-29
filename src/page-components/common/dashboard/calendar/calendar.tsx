@@ -126,7 +126,7 @@ export const Calendar = ({
 					</div>))}
 			</div>
 			<div className={styles["days-grid"]}>
-				{calendarGridDayObjects.map((day, i) => (
+				{calendarGridDayObjects?.map((day, i) => (
 					<div key={day.dateString} className={classNames(styles['day-grid-item-container'],
 						{[styles['weekend-day']]: isWeekendDay(day.dateString),
 						 [styles['current-month']]: day.isCurrentMonth,
@@ -139,7 +139,7 @@ export const Calendar = ({
 							? (<span className={styles.today}>{renderDay(day)}</span>)
 							: (renderDay(day))}
 							<div className={styles["indicators-wrapper"]}>
-								{categories?.[i].map((c: string, i: number) =>
+								{categories?.[i]?.map((c: string, i: number) =>
 									<div key={i} className={styles[`${c}-indicator`]}></div>)}
 							</div>
 						</div>

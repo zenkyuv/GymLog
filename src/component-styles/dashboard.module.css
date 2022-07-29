@@ -109,7 +109,7 @@ body {
   margin: 1em 0 1em 0;
 }
 
-h3 {
+.user-info-bar h3 {
   display: flex;
   align-self: flex-start;
 	width: 90%;

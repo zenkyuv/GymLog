@@ -6,7 +6,7 @@ import twoDots from "../../../images/two-dots.svg"
 import {getData} from '../../firestore-database'
 import homeIcon from '../../../images/home-icon.svg'
 import logoutIcon from '../../../images/logout-icon.svg'
-import WorkoutPanel from './workout-panel/add-workout'
+import WorkoutPanel from './workout-panel/workout-panel'
 import historyIcon from '../../../images/history-icon.svg'
 import calendarIcon from '../../../images/calendar-icon.svg'
 import {useEffect, useReducer, useRef, useState} from 'react'

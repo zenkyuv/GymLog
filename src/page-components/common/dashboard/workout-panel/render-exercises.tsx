@@ -3,9 +3,6 @@ import { SetExercisePanel } from '../../../../types/interfaces'
 import { UserStore } from '../../../states-store/states/user-store'
 import styles from '../../../../component-styles/workout-panel.module.css'
 
-
-	// border-bottom: 1px solid #d2d2d2;
-	// padding: 1em;
 const renderExercises = (
 	category: string,
 	exercises: [],
