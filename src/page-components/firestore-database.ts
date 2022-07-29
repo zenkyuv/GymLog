@@ -41,14 +41,21 @@ const setDocument = async (
 	const workout = {
 		yearAndMonth: yearAndMonth, exercises: {
 			[exercise]: {
-				exerciseName: exercise, reps: repsCopy, weight: weightCopy
+				exerciseName: exercise, reps: repsCopy, weight: weightCopy, category: category
 			}
 		}
 	}
+	const initialize = {}
 
 	await setDoc(
-		doc(db, 'users', userStore.userUID, timeData,category), {
+		doc(db, 'users', userStore.userUID, "timeData", timeData, "category", category), {
 			workout
+		},
+		{merge: true}
+	)
+	await setDoc(
+		doc(db, 'users', userStore.userUID, "timeData", timeData), {
+			initialize
 		},
 		{merge: true}
 	)
@@ -93,7 +100,7 @@ const getData = async (userStore: UserStore, yearAndMonth: number[]) => {
 	// userStore.isDbDataLoading(true)
 	const timeData = yearAndMonth.toString().split(',').join('-')
 	const db = getFirestore()
-	const querySnapshot = await getDocs(collection(db, 'users', userStore.userUID, timeData));
+	const querySnapshot = await getDocs(collection(db, 'users', userStore.userUID, "timeData", timeData, "category"));
 	const exercises = []
 	const categories = []
 	const d = querySnapshot.forEach((doc) => {
@@ -102,7 +109,7 @@ const getData = async (userStore: UserStore, yearAndMonth: number[]) => {
 		categories.push(doc.id)
 		if (Object.keys(doc.data()).length !== 0) {
 			for (let [key, value] of Object.entries<any>(doc.data().workout.exercises)) {
-				exercises.push({exercise: value.exerciseName, reps: value.reps.flat(), weight: value.weight.flat()})
+				exercises.push({exercise: value.exerciseName, reps: value.reps.flat(), weight: value.weight.flat(), category: value.category})
 			}
 		userStore.setDatabaseTime(doc.data().workout.yearAndMonth)
 		return doc.data
@@ -114,7 +121,7 @@ const getData = async (userStore: UserStore, yearAndMonth: number[]) => {
 const getCategories = async (userStore: UserStore, yearAndMonth: number[]) => { 
 	const timeData = yearAndMonth.toString().split(',').join('-')
 	const db = getFirestore()
-	const querySnapshot = await getDocs(collection(db, 'users', userStore.userUID, timeData));
+	const querySnapshot = await getDocs(collection(db, 'users', userStore.userUID, "timeData", timeData, "category"));
 	const categories = []
 	querySnapshot.forEach((doc) => {
 		categories.push(doc.id)
@@ -133,4 +140,25 @@ const renderCategoriesAndExercises = async (userStore: UserStore) => {
 	}
 }
 
-export { setDocument, removeDocument, getData, renderCategoriesAndExercises, getCategories}
+const getExercisesHistory = async (userStore: UserStore, category, exercise) => {
+	console.log(category)
+	console.log(userStore)
+	const db = getFirestore()
+	const querySnapshot = await getDocs(collection(db, 'users', userStore.userUID, "timeData"))
+	const timeDataArray = []
+	querySnapshot.forEach(async (doc) => {
+		timeDataArray.push(doc.id)
+	})
+	const workoutDays = timeDataArray.map(async timeData => {
+		const docRef = doc(db, 'users', userStore.userUID, "timeData", timeData, "category", category)
+		const data = (await getDoc(docRef))
+		console.log(data.exists())
+		if (data.exists()) {
+			const workoutData = data.data().workout.exercises
+			return {workoutData, timeData}
+		}
+		else return undefined
+	})
+	return workoutDays
+}
+export { setDocument, removeDocument, getData, renderCategoriesAndExercises, getCategories, getExercisesHistory}
