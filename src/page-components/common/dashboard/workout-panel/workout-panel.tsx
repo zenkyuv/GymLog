@@ -1,22 +1,18 @@
 import {
 	DataGrid,
-	GridColDef,
 	GridColumns,
 	GridRowId,
-	GridRowsProp,
-	GridToolbar,
-	GridToolbarContainer,
-	GridToolbarExport,
 } from '@mui/x-data-grid'
 import { observer } from 'mobx-react'
-import ohp from "../../../../images/ohp.jpg"
 import ControlPanel from './control-panel'
+import ohp from "../../../../images/ohp.jpg"
 import renderExercises from './render-exercises'
 import { useContext, useEffect, useState } from 'react'
 import { renderButtons } from '../calendar/calendar-buttons'
 import { WorkoutOptions } from '../../../../types/interfaces'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
 import UserStore from '../../../states-store/states/user-store'
+import noConnectionImg from "../../../../images/cloud-offline.svg"
 import loadingIndicator from '../../../../images/loading-indicator-2.svg'
 import styles from '../../../../component-styles/workout-panel.module.css'
 import { renderCategoriesAndExercises } from '../../../firestore-database'
@@ -39,7 +35,8 @@ const WorkoutPanel = observer((
 		exercise: undefined,
 		showPanel: false
 	})
-	const [categories, setCategories]:any = useState()
+	const [categories, setCategories]: any = useState()
+	const [isOnline, setStatus] = useState(navigator.onLine)
 	const daysOfCurrentMonths = new Date(year, month, 0).getDate()
 	const [selectionModel, setSelectionModel] = useState<GridRowId[]>([])
 	type AddButton = 'add-button-top' | 'add-button'
@@ -49,20 +46,18 @@ const WorkoutPanel = observer((
 	})
 
 	useEffect(() => {
-	renderCategoriesAndExercises(userStore).then(e => setCategories(e))
-	}, [])
-
-	useEffect(() => {
 		setControlPanel({category: undefined, exercise: undefined, showPanel: false})
 	}, [yearAndMonth])
+	useEffect(() => {
+		renderCategoriesAndExercises(userStore).then(e => setCategories(e))
+		window.addEventListener('online', () => setStatus(true))
+		window.addEventListener('offline', () => setStatus(false))
+	}, [])
 
-	function CustomToolbar() {
-  return (
-    <GridToolbarContainer>
-			<GridToolbarExport
-				printOptions={{allColumns: true}}
-			/>
-    </GridToolbarContainer>
+	function CustomToolbar(props) {
+	const { exercise } = props
+	return (
+			<h3 style={{textAlign: 'left', padding: '0.3em'}}>{exercise}</h3>
   );
 }
 
@@ -105,16 +100,6 @@ const WorkoutPanel = observer((
 		? userStore.databaseTime
 		: [0, 0, 0]
 	const dataExists = databaseYear === year && databaseMonth === month && databaseDay === day
-	const weight = data?.map(data => data.weight) ? data?.map(data => data.weight).flat() : undefined
-	const reps = data?.map(data => data.reps) ? data?.map(data => data.reps).flat() : undefined
-	const rows: GridRowsProp = data !== undefined
-			? weight.map((_e, i) => ({
-					reps: reps[i],
-					weight: weight[i],
-					id: i + 1,
-						}))
-		: []
-
 	const columns: GridColumns = [
 		{ field: 'id', headerName: 'Set', width: 180 },
 		{ field: 'weight', headerName: 'weight', width: 180 },
@@ -123,8 +108,8 @@ const WorkoutPanel = observer((
 
 	return (
 		<div className={styles["workout-cnt"]}>
-
-			{dataExists && !categoriesPanel.controlPanel
+			{isOnline
+				? <>{dataExists && !categoriesPanel.controlPanel
 				? (<div className={styles["time-cnt-container"]}>
 					{changeTimeBtns}
 					{addExerciseBtn('add-button-top')}
@@ -144,15 +129,21 @@ const WorkoutPanel = observer((
 								category={controlPanel.category}
 								yearAndMonth={yearAndMonth}
 								userStore={userStore} />
-							: (<div className={styles["exercise-cnt"]}>
+									: (<div className={styles["exercise-cnt"]}>
 								{data?.map(({ weight, reps, exercise, category }) => (
 									<div style={{ minHeight: "100%", position: "relative" }}>
-										<h3>{exercise}</h3>
 										<ClickAwayListener onClickAway={() => setSelectionModel([])}
 										style={{ height: '100%', width: '100%' }}>
 											<DataGrid className={styles["grid-height"]} selectionModel={selectionModel}
 											onSelectionModelChange={(selectionModel) => setSelectionModel(selectionModel)}
-											rows={rows} pageSize={5} columns={columns} components={{ Toolbar: CustomToolbar }}
+											rows={reps.map((_, i) =>
+												({
+													reps: reps[i],
+													weight: weight[i],
+													id: i + 1,
+											}))}
+											columns={columns} components={{ Toolbar: CustomToolbar }}
+											componentsProps={{toolbar: {exercise}}}
 											onRowClick={() => setControlPanel({
 												category: category,
 												exercise: exercise,
@@ -160,6 +151,8 @@ const WorkoutPanel = observer((
 											})}
 											sx={{
 												'.MuiDataGrid-row': { cursor: "pointer" },
+												height: 'auto',
+												border: 'none'
 											}} />
 										</ClickAwayListener>
 									</div>
@@ -172,7 +165,13 @@ const WorkoutPanel = observer((
 								category={categoriesPanel.category}
 								yearAndMonth={yearAndMonth}
 								userStore={userStore} />)
-							} 
+					} </>
+				: <div className={styles["noconnection"]}>
+					<div>
+						<img src={noConnectionImg} alt="noconnection img" /><span>No internet connection</span>
+					</div>
+					<span>Go online to get latest workout data.</span>
+				</div>}
 		</div>
 	)
 	}
