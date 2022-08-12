@@ -1,0 +1,15 @@
+{
+    "presets": [],
+    "plugins": [
+      [
+        "@babel/plugin-proposal-decorators" ,
+        {
+          "corejs": 2,
+          "regenerator": true,
+					"legacy": true
+        }
+      ], ["@babel/plugin-proposal-class-properties"]
+    ]
+}
+
+// "@babel/preset-typescript"
