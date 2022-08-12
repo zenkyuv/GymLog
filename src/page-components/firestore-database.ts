@@ -9,6 +9,7 @@ import {
 	collection,
 	getFirestore,
 	addDoc,
+	deleteDoc,
 } from 'firebase/firestore'
 import { UserStore } from './states-store/states/user-store'
 
@@ -25,28 +26,25 @@ const setDocument = async (
 	const [year, month, day] = yearAndMonth
 	getData(userStore, yearAndMonth)
 	const workoutData = userStore.workoutData
-	const copyWorkoutData = userStore.workoutData ? [...workoutData] : []
 	const filterWorkoutData = userStore.workoutData?.filter(data => data.exercise == exercise)
-	const userReps = filterWorkoutData ? filterWorkoutData.map(data => data.reps) : []
-	const userWeight = filterWorkoutData ? filterWorkoutData.map(data => data.weight) : []
+	const userReps = filterWorkoutData ? filterWorkoutData.map(data => data.reps).flat() : []
+	const userWeight = filterWorkoutData ? filterWorkoutData.map(data => data.weight).flat() : []
 	const timeData = yearAndMonth.toString().split(',').join('-')
-	const repsCopy = [...userReps].flat()
-	const weightCopy = [...userWeight].flat()
 
 		if (userReps && userWeight) {
-			repsCopy.push(reps)
-			weightCopy.push(weight)
+			userReps.push(reps)
+			userWeight.push(weight)
 		}
 
 	const workout = {
 		yearAndMonth: yearAndMonth, exercises: {
 			[exercise]: {
-				exerciseName: exercise, reps: repsCopy, weight: weightCopy, category: category
+				exerciseName: exercise, reps: userReps, weight: userWeight, category: category
 			}
 		}
 	}
 	const initialize = {}
-
+	// set empty object or whatever so that collection is initialized and not skipped
 	await setDoc(
 		doc(db, 'users', userStore.userUID, "timeData", timeData, "category", category), {
 			workout
@@ -55,6 +53,12 @@ const setDocument = async (
 	)
 	await setDoc(
 		doc(db, 'users', userStore.userUID, "timeData", timeData), {
+			initialize
+		},
+		{merge: true}
+	)
+	await setDoc(
+		doc(db, 'users', userStore.userUID), {
 			initialize
 		},
 		{merge: true}
@@ -71,46 +75,51 @@ const removeDocument = async (
 
 	const db = getFirestore()
 	const filterWorkoutData = userStore.workoutData?.filter(data => data.exercise == exercise)
-	const userReps = filterWorkoutData ? filterWorkoutData.map(data => data.reps) : []
-	const userWeight = filterWorkoutData ? filterWorkoutData.map(data => data.weight) : []
-	const repsCopy = [...userReps].flat()
-	const weightCopy = [...userWeight].flat()
+	const userReps = filterWorkoutData ? filterWorkoutData.map(data => data.reps).flat() : []
+	const userWeight = filterWorkoutData ? filterWorkoutData.map(data => data.weight).flat() : []
 	const timeData = yearAndMonth.toString().split(',').join('-')
 
-	repsCopy.splice(Number(...indexToRemove) - 1, 1)
-	weightCopy.splice(Number(...indexToRemove) - 1, 1)
-	
+	userReps.splice(Number(...indexToRemove) - 1, 1)
+	userWeight.splice(Number(...indexToRemove) - 1, 1)
 	const workout = {
 		yearAndMonth: yearAndMonth, exercises: {
 			[exercise]: {
-				exerciseName: exercise, reps: repsCopy, weight: weightCopy
+				exerciseName: exercise, reps: userReps, weight: userWeight
 			}
 		}
 	}
 
-	await setDoc(
-		doc(db, 'users', userStore.userUID, timeData,category), {
-			workout
-		},
-		{merge: true}
-	)
+	if (userReps.length === 0) {
+		await deleteDoc(doc(db, 'users', userStore.userUID, "timeData", timeData, "category", category))
+	} else {
+			await setDoc(
+			doc(db, 'users', userStore.userUID, "timeData", timeData, "category", category), {
+				workout
+			},
+			{merge: true}
+		)
+	}
+	getData(userStore, yearAndMonth) //refresh state with new data after data is removed from database 
 }
 
 const getData = async (userStore: UserStore, yearAndMonth: number[]) => {
-	// userStore.isDbDataLoading(true)
+	userStore.isDbDataLoading(true)
 	const timeData = yearAndMonth.toString().split(',').join('-')
 	const db = getFirestore()
-	const querySnapshot = await getDocs(collection(db, 'users', userStore.userUID, "timeData", timeData, "category"));
+	const querySnapshot = await getDocs(collection(db, 'users', userStore.userUID, "timeData", timeData, "category"))
 	const exercises = []
 	const categories = []
-	const d = querySnapshot.forEach((doc) => {
-		// doc.data() is never undefined for query doc snapshots
-		// console.log(doc.id, " => ", doc.data().workout.exercises)
+	if (querySnapshot.empty) {
+		userStore.setDatabaseTime(undefined)
+		userStore.isDbDataLoading(false)
+	}
+	querySnapshot.forEach((doc) => {
 		categories.push(doc.id)
 		if (Object.keys(doc.data()).length !== 0) {
 			for (let [key, value] of Object.entries<any>(doc.data().workout.exercises)) {
 				exercises.push({exercise: value.exerciseName, reps: value.reps.flat(), weight: value.weight.flat(), category: value.category})
 			}
+		userStore.isDbDataLoading(false)
 		userStore.setDatabaseTime(doc.data().workout.yearAndMonth)
 		return doc.data
 		}
@@ -134,15 +143,22 @@ const renderCategoriesAndExercises = async (userStore: UserStore) => {
 	const docRef = doc(db, 'users', userStore.userUID)
 	const docSnap = await getDoc(docRef)
 	if (docSnap.exists()) {
-		for (let key in docSnap.data()) {
-			return docSnap.data()[key]
-		}
+			return docSnap.data().categories
+	}
+}
+
+const getUserName = async (userStore: UserStore) => {
+	const db = getFirestore()
+	const docRef = doc(db, 'users', userStore.userUID)
+	const docSnap = await getDoc(docRef)
+	if (docSnap.exists()) {
+		const firstName: string = docSnap.data().first
+		const lastName:string = docSnap.data().last
+			return {firstName, lastName}
 	}
 }
 
 const getExercisesHistory = async (userStore: UserStore, category, exercise) => {
-	console.log(category)
-	console.log(userStore)
 	const db = getFirestore()
 	const querySnapshot = await getDocs(collection(db, 'users', userStore.userUID, "timeData"))
 	const timeDataArray = []
@@ -152,7 +168,6 @@ const getExercisesHistory = async (userStore: UserStore, category, exercise) => 
 	const workoutDays = timeDataArray.map(async timeData => {
 		const docRef = doc(db, 'users', userStore.userUID, "timeData", timeData, "category", category)
 		const data = (await getDoc(docRef))
-		console.log(data.exists())
 		if (data.exists()) {
 			const workoutData = data.data().workout.exercises
 			return {workoutData, timeData}
@@ -161,4 +176,4 @@ const getExercisesHistory = async (userStore: UserStore, category, exercise) => 
 	})
 	return workoutDays
 }
-export { setDocument, removeDocument, getData, renderCategoriesAndExercises, getCategories, getExercisesHistory}
+export { setDocument, removeDocument, getData, renderCategoriesAndExercises, getCategories, getExercisesHistory, getUserName}
