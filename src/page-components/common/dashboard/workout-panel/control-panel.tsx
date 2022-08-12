@@ -90,7 +90,7 @@ const ControlPanel = (
 			{historyPanel
 				? <ExerciseHistory category={category} exercise={exercise} />
 				: workoutChart
-					? <WorkoutChart /> 
+					? <WorkoutChart category={category} exercise={exercise} /> 
 					: <><form className={`${styles.column} ${styles["add-panel"]}`} onReset={handleReset} onSubmit={handleSubmit}>
 					<div className={styles["text-container"]}>
 						<h4 onClick={() => setHistoryPanel(true)}>History</h4>
@@ -103,26 +103,24 @@ const ControlPanel = (
 					REPS:
 					<TextField type="number" value={values.reps} onChange={handleChange('reps')}
 						id={styles["outlined-start-adornment"]} placeholder="reps" />
-					<div className={styles["flex-gap"]}>
-						<Button type="submit"
-							variant="contained" color="success">
+						<div className={styles["flex-gap"]}>
 							{isSelected
-								? <span>Update</span>
-								: <span>Save</span>}
-						</Button>
-						<Button type="reset" color={isSelected ? 'error' : 'primary'}
-							onClick={() => getData(userStore, yearAndMonth)} variant="contained">
+								? <Button type="submit" variant="contained" color="success">Update</Button>
+								:	<Button type="submit" variant="contained" color="success">Save</Button>}
 							{isSelected
-								? (<span onClick={() => removeDocument(selectionModel, userStore, exercise, yearAndMonth, category)}>
-									Delete </span>)
-								: (<span>Clear</span>)}
-						</Button>
+								? <Button onClick={() => removeDocument(selectionModel, userStore, exercise, yearAndMonth, category)}
+									type="reset" color={isSelected ? 'error' : 'primary'} variant="contained">
+									Delete
+								</Button>
+								: <Button type="reset" color={isSelected ? 'error' : 'primary'} variant="contained">
+									Clear
+								</Button>}
 					</div>
 				</form>
 				<div className={`${styles.row} ${styles["info-panel"]}`}>
 						<ClickAwayListener onClickAway={() => setSelectionModel([])}
 							style={{ height: '100%', width: '100%' }}>
-							<DataGrid rows={databaseData.rows} pageSize={5} columns={columns}
+							<DataGrid rows={databaseData.rows} columns={columns}
 								selectionModel={selectionModel} onSelectionModelChange={(selectionModel) => setSelectionModel(selectionModel)} />
 						</ClickAwayListener>
 					</div></>
