@@ -27,6 +27,9 @@ const auth = getAuth()
 const createUser = ({ userData, userStore }: SignUserInfo) => {
 	const email = userData.get('email').toString()
 	const password = userData.get('password').toString()
+	const lastName = userData.get('lastName').toString()
+	const firstName = userData.get('firstName').toString()
+	console.log(lastName, firstName)
 	createUserWithEmailAndPassword(auth, email, password).then(
 		(cred: any) => {
 			const user = cred.user
@@ -35,12 +38,10 @@ const createUser = ({ userData, userStore }: SignUserInfo) => {
 				userStore.setUserUID(user.uid)
 			}
 			return setDoc(doc(db, 'users', cred.user.uid), {
-				categories
-			})
-			// return setDoc(doc(db, 'users', cred.user.uid), {
-			// 	first: 'Ada',
-			// 	last: 'Lovelace',
-			// })
+				categories,
+				first: firstName,
+				last: lastName,
+			}).catch(err => console.log(err))
 		}
 	)
 }
