@@ -1,9 +1,9 @@
-import App from './App.js'
+import App from './App'
 import ReactDOM from 'react-dom'
 import {
 	StoresProvider,
 	stores,
-} from './page-components/states-store/store.js'
+} from './page-components/states-store/store'
 
 ReactDOM.render(
 	<StoresProvider value={stores}>
