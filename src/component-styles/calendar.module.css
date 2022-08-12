@@ -143,6 +143,33 @@ td {
 	border-radius: 5px;
 }
 
+.noconnection {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	flex-direction: column;
+	align-self: center;
+	align-items: flex-start;
+	gap: 0.5em;
+}
+
+.noconnection span:first-child {
+	color: #404040;
+	padding: 0.2em;
+}
+
+.noconnection div span {
+	font-size: 15px;
+	font-weight: 900;
+}
+
+.noconnection div {
+	display: flex;
+  align-items: center;
+	gap: 0.5em;
+}
+
 /* media queries */
 
 @media only screen and (max-width: 1000px) { 

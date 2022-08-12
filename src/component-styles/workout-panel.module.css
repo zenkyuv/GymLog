@@ -189,9 +189,9 @@ h3 {
 .exercise-cnt {
 	display: flex;
 	flex-direction:column;
-  margin: 0 2em 0 2em;
-  height: 373px;
-	gap: 3em;
+	margin: 0 2em 0 2em;
+	height: 100%;
+	gap: 5em;
 }
 
 .row {
@@ -211,8 +211,46 @@ h3 {
 
 .grid-height {
 	min-height: 100%;
+	border: none;
+}
+
+.MuiDataGrid-root {
+	border: none;
 }
 
 .datagrid-container {
 	height: 100%;
+}
+
+.toolbar-container {
+	display: flex;
+	margin: 0.5em;
+	gap: 2em;
+}
+
+.noconnection {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	flex-direction: column;
+	align-self: center;
+	align-items: flex-start;
+	gap: 0.5em;
+}
+
+.noconnection span:first-child {
+	color: #404040;
+	padding: 0.2em;
+}
+
+.noconnection div span {
+	font-size: 15px;
+	font-weight: 900;
+}
+
+.noconnection div {
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
 }
