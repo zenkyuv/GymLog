@@ -3,6 +3,7 @@
     "experimentalDecorators": true,
     "typeRoots": ["node_modules/@types", "src/module"],
     "target": "esnext",
+		"types": ["jest", "node", "@testing-library/jest-dom"],
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -17,7 +18,7 @@
     "declaration": true,
     "sourceMap": true,
     "isolatedModules": true,
-    "noEmit": false,
+    "noEmit": true,
     "jsx": "react-jsx",
     "rootDir": "src",
     "outDir": "src-x/output"
