@@ -3,7 +3,8 @@ import { observable } from 'mobx'
 import { createContext } from 'react'
 
 export class PageStore {
-  @observable dashboardVisible = false
+	@observable dashboardVisible = false
+	@observable loginFormsOpened = false
 
   constructor() {
     makeObservable(this)
@@ -15,7 +16,16 @@ export class PageStore {
 
   @action makeDashboardNotVisible = () => {
     this.dashboardVisible = false
-  }
+	}
+	
+	@action openLoginForms = () => {
+		this.loginFormsOpened = true
+	}
+
+	@action closeLoginForms = () => {
+		this.loginFormsOpened = false
+	}
+
 }
 const pageStore = new PageStore()
 
