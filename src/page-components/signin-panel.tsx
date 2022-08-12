@@ -16,24 +16,13 @@ import UserStore from './states-store/states/user-store'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import {createTheme, ThemeProvider} from '@mui/material/styles'
-
-function Copyright(props: any) {
-	return (
-		<Typography variant="body2" color="text.secondary" align="center" {...props}>
-			{'Copyright © '}
-			<Link color="inherit" href="https://mui.com/">
-				Your Website
-			</Link>{' '}
-			{new Date().getFullYear()}
-			{'.'}
-		</Typography>
-	)
-}
+import PageStore from './states-store/states/page-store'
 
 const theme = createTheme()
 
-export const SignIn = ({ setClick }: SignProps) => {
+export const SignIn = () => {
 	const userStore = useContext(UserStore)
+	const pageStore = useContext(PageStore)
 	const [showSignUp, setSignUp] = useState(false)
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
@@ -41,6 +30,7 @@ export const SignIn = ({ setClick }: SignProps) => {
 		signUser({userData, userStore})
 	}
 
+	const [error, setError] = useState(false)
 	return showSignUp === false
 		? <ThemeProvider theme={theme}>
 				<Container sx={{display: 'flex', alignItems: "center", flexDirection: "column", zIndex: 2,
@@ -53,18 +43,18 @@ export const SignIn = ({ setClick }: SignProps) => {
 							<LockOutlinedIcon />
 						</Avatar>
 						<Typography component="h1" variant="h5">Sign in</Typography>
-						<Box data-testid="form" component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-							<TextField margin="normal" required fullWidth id="email" label="Email Address"
+						<form onInvalid={() => setError(true)} data-testid="form" onSubmit={handleSubmit}>
+							<TextField error={error} margin="normal" required fullWidth id="email" label="Email Address"
 								name="email" autoComplete="email" autoFocus inputProps={{ "data-testid": "email" }} />
-							<TextField margin="normal" required fullWidth name="password" label="Password"
+							<TextField error={error} margin="normal" required fullWidth name="password" label="Password"
 								type="password" id="password" autoComplete="current-password" inputProps={{ "data-testid": "password" }} />
 							<FormControlLabel control={<Checkbox value="remember" color="primary" />}
 								label="Remember me"/>
 							<Button  type="submit" data-testid="siginin-button" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
 								Sign In
 							</Button>
-							<Button type="button" fullWidth variant="contained" color='secondary'
-								onClick={() => setClick(false)} sx={{ mt: 1, mb: 2 }}>
+							<Button onClick={() => pageStore.closeLoginForms()} type="button" fullWidth variant="contained" color='secondary'
+								sx={{ mt: 1, mb: 2 }}>
 								Cancel
 							</Button>
 							<Grid container>
@@ -77,12 +67,11 @@ export const SignIn = ({ setClick }: SignProps) => {
 									</Link>
 								</Grid>
 							</Grid>
-						</Box>
+						</form>
 					</Box>
-					<Copyright sx={{ mt: 8, mb: 4 }} />
 				</Container>
 			</ThemeProvider>
-		: <SignUp setClick={setClick} />
+		: <SignUp />
 }
 
 export default SignIn
