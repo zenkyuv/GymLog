@@ -24,7 +24,7 @@ const WorkoutChart = (workout) => {
 		.map((rep, i) => rep * history?.[workout.exercise]?.weight[i]))
 
 	const renderLineChart = (
-	<LineChart width={400} height={400} data={data}>
+	<LineChart width={400} height={350} data={data}>
 		<Line type="monotone" dataKey="volume" stroke="#8884d8" />
 		<CartesianGrid stroke="#ccc" />
 		<XAxis dataKey="timeData" />
@@ -36,6 +36,10 @@ const WorkoutChart = (workout) => {
 	return (
 		<div>
 			<h1>Chart</h1>
+			<select style={{padding: '0.5em', margin: '1em'}}>
+				<option value="">volume</option>
+				<option disabled value="">More to be added ...</option>
+			</select>
 			{renderLineChart}
 		</div>
 	)
