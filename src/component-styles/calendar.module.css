@@ -85,6 +85,10 @@ td {
 	margin: 1em;
 }
 
+.navigation-header select {
+	border: none;
+}
+
 .month-nav-arrow-buttons {
 	display: flex;
 	gap: 1em;
@@ -93,6 +97,8 @@ td {
 .month-nav-arrow-buttons button {
 	padding: 0.6em 0.9em 0.5em 0.9em;
 	border-radius: 10px;
+	border: none;
+	background-color: #c5bfbf;
 }
 
 .indicators-wrapper {
@@ -204,5 +210,8 @@ td {
 	.not-current-month {
 		width: 3em;
 		height: 3em;
+	}
+	.calendar-root {
+		height: 400px;
 	}
 }
