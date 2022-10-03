@@ -32,7 +32,7 @@ export const Calendar = ({
 	renderDay: (day: any) => JSX.Element
 	}) => {
 
-	let [year, month] = yearAndMonth
+	let [year, month, day] = yearAndMonth
 	const userStore = useContext(UserStore)
 	const [categories, setCategory] = useState<string[][]>()
 	const [isOnline, setStatus] = useState(navigator.onLine)
@@ -55,13 +55,13 @@ export const Calendar = ({
 	const handleMonthSelect = (evt: ChangeEvent<HTMLSelectElement>) => {
 		let nextYear = year
 		let nextMonth = parseInt(evt.currentTarget.value, 10)
-		onYearAndMonthChange([nextYear, nextMonth])
+		onYearAndMonthChange([nextYear, nextMonth, day])
 	}
 
 	const handleYearSelect = (evt: ChangeEvent<HTMLSelectElement>) => {
 		let nextMonth = month
 		let nextYear = parseInt(evt.currentTarget.value, 10)
-		onYearAndMonthChange([nextYear, nextMonth])
+		onYearAndMonthChange([nextYear, nextMonth, day])
 	}
 
 	const component = 'calendar'
