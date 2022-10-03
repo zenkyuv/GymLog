@@ -64,14 +64,14 @@ const ControlPanel = (
 
 	const loadDatabaseData = () => {
 		const dbData = userStore.workoutData?.filter(data => data.exercise == exercise)
-		const weight = dbData !== [] ? dbData?.map(data => data.weight).flat() : undefined
-		const reps = dbData !== [] ? dbData?.map(data => data.reps).flat() : undefined
+		const weight = dbData?.map(data => data.weight).flat()
+		const reps = dbData?.map(data => data.reps).flat()
 		const index = weight
 		const rows: GridRowsProp = index !== undefined
 			? index.map((_e, i) => ({
 				id: i + 1,
-				weight: weight[i],
-				reps: reps[i],
+				weight: weight?.[i],
+				reps: reps?.[i],
 			}))
 			: []
 		return {weight, reps, rows}
@@ -99,9 +99,9 @@ const ControlPanel = (
 					<h1>{exercise}</h1>
 					WEIGHT(kgs):
 					<TextField type="number" id={styles["outlined-start-adornment"]} placeholder="kg"
-						value={values.weight} onChange={handleChange('weight')} />
+						value={values?.weight} onChange={handleChange('weight')} />
 					REPS:
-					<TextField type="number" value={values.reps} onChange={handleChange('reps')}
+					<TextField type="number" value={values?.reps} onChange={handleChange('reps')}
 						id={styles["outlined-start-adornment"]} placeholder="reps" />
 						<div className={styles["flex-gap"]}>
 							{isSelected
