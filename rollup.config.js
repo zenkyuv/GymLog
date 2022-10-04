@@ -11,11 +11,11 @@ export default {
   input: 'src/index.tsx',
 	output: {
 		sourcemap: true,
-    dir: 'src-x/output',
+    dir: 'src-x',
     format: 'iife',
   },
 	plugins: [
-		copy({targets: [{src: './src/index.html', dest: './src-x/output'}]}),
+		copy({targets: [{src: './src/index.html', dest: './src-x'}]}),
 			postcss({
 			extract: true,
 			modules: true
