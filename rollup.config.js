@@ -5,6 +5,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import postcss from 'rollup-plugin-postcss';
+import copy from 'rollup-plugin-copy'
 
 export default {
   input: 'src/index.tsx',
@@ -14,6 +15,7 @@ export default {
     format: 'iife',
   },
 	plugins: [
+		copy({targets: [{src: './src/index.html', dest: './src-x/output'}]}),
 			postcss({
 			extract: true,
 			modules: true
