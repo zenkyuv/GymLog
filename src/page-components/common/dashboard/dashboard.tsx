@@ -152,7 +152,7 @@ const Dashboard = observer(() => {
 				</div>
 				<div className={styles["user-info-bar"]}>
 					<h3><span> My Profile</span> <img src={twoDots} alt="" /></h3>
-					<div className={styles["user-avatar"]}>PG</div>
+					<div className={styles["user-avatar"]}>{user?.firstName?.[0]}{user?.lastName?.[0]}</div>
 					<h3 className={styles["flex-center"]}>{user?.firstName && user?.lastName
 						? `${user?.firstName} ${user?.lastName}`
 						: <img src={loadingIndicatorImg} alt="loading indicator" />}</h3>
