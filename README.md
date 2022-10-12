@@ -1,5 +1,5 @@
 # Installation ⚙  
-1.`git clone git@github.com:zenkyuv/GymLog.git`  
+1.`git clone https://github.com/zenkyuv/GymLog.git`  
 2.`npm install`  
 3.`npm run start`
 
