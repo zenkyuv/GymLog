@@ -24,7 +24,6 @@ const setDocument = async (
 
 	const db = getFirestore()
 	const [year, month, day] = yearAndMonth
-	getData(userStore, yearAndMonth)
 	const workoutData = userStore.workoutData
 	const filterWorkoutData = userStore.workoutData?.filter(data => data.exercise == exercise)
 	const userReps = filterWorkoutData ? filterWorkoutData.map(data => data.reps).flat() : []
@@ -63,6 +62,7 @@ const setDocument = async (
 		},
 		{merge: true}
 	)
+	getData(userStore, yearAndMonth)
 }
 
 const removeDocument = async (
