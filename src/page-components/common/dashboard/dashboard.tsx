@@ -183,8 +183,8 @@ const Dashboard = observer(() => {
 									<h2 className={styles["text-bmi"]}>
 										<span>BMI</span> <img onClick={() => setInfoPanel((state) => !state)} src={infoImg} alt="info icon" />
 									</h2>
-									<h2><span>Weight:</span> <input ref={userWeight} type="number" /></h2>
-									<h2><span>Height:</span> <input ref={userHeight} type="number" /></h2>
+									<h2><span>Weight:</span> <input ref={userWeight} type="number" /> kg</h2>
+									<h2><span>Height:</span> <input ref={userHeight} type="number" /> cm</h2>
 									<div>
 										<button onClick={() => calculateBmi()} className={styles["bmi-button"]}>Calculate bmi</button>
 									</div>
