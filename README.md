@@ -16,3 +16,5 @@ Gymlog is web app for tracking workouts with a focus on simplicity and clean des
 ### Chat (To be added)
 ### Database
 - Data is stored on firebase databases
+### Live Website
+gymlogsite.netlify.app
